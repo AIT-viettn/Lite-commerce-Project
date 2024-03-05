@@ -1,0 +1,42 @@
+﻿@model SV20T1020639.DomainModels.Category
+@{
+    ViewBag.Title = "Xóa loại hàng";
+}
+
+
+<div class="box box-danger">
+    <div class="box-body">
+        <form class="form-horizontal" method="post" action="~/Category/Delete/@Model.CategoryID">
+            <div class="form-group">
+                <label class="control-label col-sm-2">Mã loại:</label>
+                <p class="form-control-static">@Model.CategoryID</p>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2">Tên loại:</label>
+                <p class="form-control-static">@Model.CategoryName</p>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2">Thông tin:</label>
+                <p class="form-control-static">@Model.Description</p>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-lg-offset-1 col-sm-10">
+                    @if (!SV20T1020639.BusinessLayers.CommonDataService.IsUsedCategory(Model.CategoryID))
+                    {
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fa fa-trash"></i>Xóa dữ liệu
+                        </button>
+                    }
+                    <a href="~/Category" class="btn btn-defalt">
+                        Quay lại
+                    </a>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+</div>
