@@ -31,6 +31,8 @@ namespace SV20T1020639.Web.Controllers
 
             {
                 EmployeeID = 0,
+                Photo = "nophoto.png",
+                BirthDate = new DateTime(1990,1,1)
             };
 
             return View("Edit", model);
@@ -42,11 +44,35 @@ namespace SV20T1020639.Web.Controllers
             if (model == null)
                 return RedirectToAction("Index");
 
+            if (string.IsNullOrWhiteSpace(model.Photo))
+                model.Photo = "nophoto.png";
+
             return View(model);
         }
         [HttpPost]
-        public IActionResult Save(Employee model) // nhieu qua nên moi xai model
+        public IActionResult Save(Employee model, string birthDateInput = "", IFormFile? uploadPhoto = null) // nhieu qua nên moi xai model
         {
+            //Xử lý ngày sinh
+            DateTime? d = birthDateInput.ToDateTime();
+            if (d.HasValue)
+                model.BirthDate = d.Value;
+
+            //Xử lý ảnh upload: Nếu có ảnh được upload thì lưu ảnh lên server, gán tên file ảnh đã lưu cho model.Photo
+            if (uploadPhoto != null)
+            {
+                //Tên file sẽ lưu trên server
+                string fileName = $"{DateTime.Now.Ticks}_{uploadPhoto.FileName}"; //Tên file sẽ lưu trên server
+                                                                                  //Đường dẫn đến file sẽ lưu trên server 
+                string filePath = Path.Combine(ApplicationContext.HostEnviroment.WebRootPath, @"images\employees", fileName);
+
+                //Lưu file lên server
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    uploadPhoto.CopyTo(stream);
+                }
+                //Gán tên file ảnh cho model.Photo
+                model.Photo = fileName;
+            }
             if (model.EmployeeID == 0)
             {
                 int id = CommonDataService.AddEmployee(model);
