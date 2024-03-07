@@ -1,14 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SV20T1020639.BusinessLayers;
 
 namespace SV20T1020639.Web.Controllers
 {
     public class ProductController : Controller
     {
-        public IActionResult Index()
+        const int PAGE_SIZE = 20;
+        public IActionResult Index( string searchValue = "")
         {
-            return View();
-        }
-        public IActionResult Create()
+            var data = ProductDataServices.ListProducts(searchValue ?? "");
+            var model = new Models.ProductSearchResult()
+            {
+                SearchValue = searchValue ?? "",
+                Data = data
+            };
+            return View(model);
+        }// dữ liệu truyền cho View có kiểu dữ liệu Model.ShipperSearchResult
+            public IActionResult Create()
         {
 
             ViewBag.Title = "Bổ sung thông tin mặt hàng";

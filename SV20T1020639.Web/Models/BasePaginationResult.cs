@@ -48,5 +48,9 @@ namespace SV20T1020639.Web.Models
     {
         public List<Supplier> Data { get; set; } = new List<Supplier>();
     }
+    public class ProductSearchResult : BasePaginationResult
+    {
+        public List<Product> Data { get; set; } = new List<Product>();
+    }
 
 }
