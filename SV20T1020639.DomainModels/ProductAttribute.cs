@@ -8,7 +8,7 @@ namespace SV20T1020639.DomainModels
 {
     public class ProductAttribute
     {
-        public long AttributeId { get; set; }
+        public long AttributeID { get; set; }
         public int ProductID { get; set; }
         public string AttributeName { get; set; } = "";
         public string AtttributeValue { get; set; } = "";

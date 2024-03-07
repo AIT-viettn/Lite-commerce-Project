@@ -26,7 +26,30 @@ namespace SV20T1020639.BusinessLayers
         /// <returns></returns>
         public static List<Product> ListProducts(string searchValue = "")
         {
-            return productDB.List(searchValue).ToList();    
+            return productDB.List().ToList();    
+        }
+        /// <summary>
+        /// Tìm kiếm và lấy danh sách mặt hàng dưới dạng phân trang
+        /// </summary>
+        /// <param name="rowCount"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchValue"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="supplierId"></param>
+        /// <param name="minPrice"></param>
+        /// <param name="maxPrice"></param>
+        /// <returns></returns>
+        public static List<Product> ListProducts(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "", 
+            int categoryId = 0, int supplierId = 0, decimal minPrice = 0, decimal maxPrice = 0)
+        {
+            rowCount = productDB.Count(searchValue);
+            return productDB.List(page, pageSize, searchValue,categoryId,supplierId,minPrice,maxPrice).ToList();
+        }
+
+        public static Product GetProduct(int productId) 
+        {
+            return productDB.Get(productId);
         }
     }
 }

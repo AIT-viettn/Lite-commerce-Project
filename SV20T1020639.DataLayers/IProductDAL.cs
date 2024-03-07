@@ -75,7 +75,7 @@ namespace SV20T1020639.DataLayers
         /// </summary>
         /// <param name="productID"></param>
         /// <returns></returns>
-        ProductPhoto? GetPhoto(long productID);
+        ProductPhoto? GetPhoto(long photoID);
         /// <summary>
         /// Bổ sung  1 ảnh dựa vào ID
         /// </summary>
