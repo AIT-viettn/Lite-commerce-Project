@@ -10,13 +10,13 @@
             <div class="form-group">
                 <label>Tên đơn vị giao hàng:</label>
                 <input type="text" class="form-control" name="ShipperName" autofocus value="@Model.ShipperName">
+                @Html.ValidationMessageFor(m => m.ShipperName,"", new {@style = "color:#f00" })
             </div>
-
-            
-
             <div class="form-group">
                 <label>Điện Thoại:</label>
                 <input type="text" class="form-control" name="Phone" value="@Model.Phone">
+                @Html.ValidationMessageFor(m => m.Phone,"", new {@style = "color:#f00" })
+
             </div>
 
             
@@ -28,7 +28,7 @@
                     Quay lại
                 </a>
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            @Html.ValidationMessage("Error", new {@style = "color:#f00" })
         </form>
     </div>
 </div>

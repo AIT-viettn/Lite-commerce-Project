@@ -7,6 +7,8 @@ namespace SV20T1020639.Web.Controllers
     public class ShipperController : Controller
     {
         const int PAGE_SIZE = 20;
+        const string CREATE_TITLE = " nhập đơn vị giao hàng mới";
+
         public IActionResult Index(int page = 1, string searchValue = "")
         {
 
@@ -47,13 +49,34 @@ namespace SV20T1020639.Web.Controllers
         [HttpPost]
         public IActionResult Save(Shipper model) // nhieu qua nên moi xai model
         {
+            if (string.IsNullOrWhiteSpace(model.ShipperName))
+                ModelState.AddModelError("ShipperName", "Tên đơn vị không được để trống"); //tên lỗi + thông báo lỗi
+            if (string.IsNullOrWhiteSpace(model.Phone))
+                ModelState.AddModelError("Phone", "Số điện thoại không được để trống");
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Title = model.ShipperID == 0 ? "Bổ sung đơn vị giao hàng" : "cập nhật thông tin đơn vị giao hàng";
+                return View("Edit", model);
+            }
             if (model.ShipperID == 0)
             {
                 int id = CommonDataService.AddShipper(model);
+                if (id < 0)
+                {
+                    ModelState.AddModelError("Phone", "Số điện thoại bị trùng");
+                    ViewBag.Title = CREATE_TITLE;
+                    return View("Edit", model);
+                }
             }
             else
             {
                 bool result = CommonDataService.UpdateShipper(model);
+                if (!result)
+                {
+                    ModelState.AddModelError("Error", "Không cập nhật được đơn vị giao hàng. Có thể số điện thoại bị trùng");
+                    return View("Edit", model);
+                }
             }
             return RedirectToAction("Index");
         } //Ctrl + R + R , refactor thay đổi đồng bộ

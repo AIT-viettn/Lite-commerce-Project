@@ -7,6 +7,8 @@ namespace SV20T1020639.Web.Controllers
     public class CategoryController : Controller
     {
         const int PAGE_SIZE = 20;
+        const string CREATE_TITLE = " nhập loại hàng mới";
+
         public IActionResult Index(int page = 1, string searchValue = "")
         {
             int rowCount = 0;
@@ -44,13 +46,31 @@ namespace SV20T1020639.Web.Controllers
         }
         public IActionResult Save(Category model) // nhieu qua nên moi xai model
         {
+            if (string.IsNullOrWhiteSpace(model.CategoryName))
+                ModelState.AddModelError("CategoryName", "Tên loại hàng được để trống"); //tên lỗi + thông báo lỗi
+            if (string.IsNullOrWhiteSpace(model.Description))
+                ModelState.AddModelError("Description", "vui lòng nhập thông tin chi tiết cho loại hàng");
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Title = model.CategoryID == 0 ? "Bổ sung loại hàng" : "cập nhật thông tin loại hàng";
+                return View("Edit", model);
+            }
             if (model.CategoryID == 0)
             {
                 int id = CommonDataService.AddCategory(model);
+                if (id < 0)
+                {
+                    ModelState.AddModelError("CategoryName", "Tên loại hàng bị trùng");
+                    ViewBag.Title = CREATE_TITLE;
+                    return View("Edit", model);
+                }
             }
             else
             {
                 bool result = CommonDataService.UpdateCategory(model);
+                ModelState.AddModelError("Error", "Không cập nhật được loại hàng. Có thể tên loại hàng bị trùng");
+                return View("Edit", model);
             }
             return RedirectToAction("Index");
         } //Ctrl + R + R , refactor thay đổi đồng bộ

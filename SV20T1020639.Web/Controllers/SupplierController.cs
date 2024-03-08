@@ -7,6 +7,8 @@ namespace SV20T1020639.Web.Controllers
     public class SupplierController : Controller
     {
         const int PAGE_SIZE = 20;
+        const string CREATE_TITLE = " nhập nhà cung cấp mới";
+
         public IActionResult Index(int page = 1, string searchValue = "")
         {
 
@@ -47,6 +49,14 @@ namespace SV20T1020639.Web.Controllers
         [HttpPost]
         public IActionResult Save(Supplier model) // nhieu qua nên moi xai model
         {
+            if (string.IsNullOrWhiteSpace(model.SupplierName))
+                ModelState.AddModelError("SupplierName", "Tên nhà cung cấp được để trống"); //tên lỗi + thông báo lỗi
+            if (string.IsNullOrWhiteSpace(model.ContactName))
+                ModelState.AddModelError("ContactName", "Tên giao dịch không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Email))
+                ModelState.AddModelError("Email", "Email không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Provice))
+                ModelState.AddModelError("Provice", "Vui lòng chọn tỉnh/thành");
             if (model.SupplierID == 0)
             {
                 int id = CommonDataService.AddSupplier(model);

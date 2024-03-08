@@ -6,16 +6,23 @@
     <div class="box-body">
         <form action="~/Customer/Save" method="post">
 
-            <input type="hidden" name="@nameof(Model.CustomerID)" value="@Model.CustomerID" />
+            @*@Html.ValidationSummary("", new {@style = "color:#f00" } ) hiện tất cả thông báo lỗi *@
+
+            @*<input type="hidden" name="@nameof(Model.CustomerID)" value="@Model.CustomerID" />*@
+            @Html.HiddenFor(m => m.CustomerID)
 
             <div class="form-group">
                 <label>Tên khách hàng:</label>
-                <input type="text" class="form-control" name="CustomerName" autofocus value="@Model.CustomerName">
+                @Html.TextBoxFor(m => m.CustomerName, new { @class = "form-control",@autofocus = "autofocus"} )
+                @*<input type="text" class="form-control" name="CustomerName" autofocus value="@Model.CustomerName">*@
+                @Html.ValidationMessageFor(m => m.CustomerName,"", new {@style = "color:#f00" })
             </div>
 
             <div class="form-group">
                 <label>Tên giao dịch:</label>
                 <input type="text" class="form-control" name="ContactName" value="@Model.ContactName">
+                @Html.ValidationMessage("ContactName", new {@style = "color:#f00" })
+
             </div>
 
             <div class="form-group">
@@ -26,6 +33,8 @@
             <div class="form-group">
                 <label>Email:</label>
                 <input type="email" class="form-control" name="Email" value="@Model.Email">
+                @Html.ValidationMessage("Email", new {@style = "color:#f00" })
+
             </div>
 
             <div class="form-group">
@@ -34,8 +43,8 @@
             </div>
             <div class="form-group">
                 <label>Tỉnh thành:</label>
-                <select class="form-control" name="Province">
-                    <option>-- Chọn tỉnh/thành</option>
+                @* <select class="form-control" name="Province">
+                    <option value="">-- Chọn tỉnh/thành</option>
                     @foreach (var item in SV20T1020639.BusinessLayers.CommonDataService.ListOfProvinces())
                     {
                         if (item.ProvinceName == Model.Province)
@@ -48,7 +57,10 @@
                         }
                     }
 
-                </select>
+                </select> *@
+                @Html.DropDownListFor(m=>m.Province,SelectListHelper.Provinces(),new {@class="form-control"})
+
+                @Html.ValidationMessage(nameof(Model.Province), new { @style = "color:#f00" })
             </div>
 
             <div class="form-group">
@@ -76,7 +88,8 @@
                     Quay lại
                 </a>
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            @Html.ValidationMessage("Error", new {@style = "color:#f00" })
+
         </form>
     </div>
 </div>

@@ -72,15 +72,18 @@
         </div>
         <div class="text-center">
             <ul class="pagination">
-                @for (int p = 1; p <= Model.PageCount; p++)
+                @if (Model.PageCount > 1)
                 {
-                    if (Model.Page == p)
+                    @for (int p = 1; p <= Model.PageCount; p++)
                     {
-                        <li class="active"><a href="#">@p</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="~/Employee?page=@p&searchValue=@Model.SearchValue">@p</a></li>
+                        if (Model.Page == p)
+                        {
+                            <li class="active"><a href="#">@p</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="~/Employee?page=@p&searchValue=@Model.SearchValue">@p</a></li>
+                        }
                     }
                 }
             </ul>

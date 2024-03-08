@@ -14,11 +14,13 @@
             <div class="form-group">
                 <label>Tên loại:</label>
                 <input type="text" class="form-control" name="CategoryName" autofocus value="@Model.CategoryName">
+                @Html.ValidationMessageFor(m => m.CategoryName,"", new {@style = "color:#f00" })
             </div>
 
             <div class="form-group">
                 <label>Thông tin:</label>
                 <input type="text" class="form-control" name="Description" value="@Model.Description">
+                @Html.ValidationMessageFor(m => m.Description,"", new {@style = "color:#f00" })
             </div>
 
             
@@ -30,7 +32,7 @@
                     Quay lại
                 </a>
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            @Html.ValidationMessage("Error", new {@style = "color:#f00" })
         </form>
     </div>
 </div>

@@ -5,7 +5,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddMvcOptions(option =>
+    {
+        option.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true; // không sử dụng thông báo mặc định
+    });
+//builder.Services.AddControllersWithViews(); Sử dụng thông báo mặc định
 builder.Services.AddSession(option =>
 {
     option.IdleTimeout = TimeSpan.FromMinutes(60);

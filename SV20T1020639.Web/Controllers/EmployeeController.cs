@@ -7,6 +7,7 @@ namespace SV20T1020639.Web.Controllers
     public class EmployeeController : Controller
     {
         const int PAGE_SIZE = 20;
+        const string CREATE_TITLE = " nhập nhân viên mới";
         public IActionResult Index(int page = 1, string searchValue = "")
         {
 
@@ -52,7 +53,20 @@ namespace SV20T1020639.Web.Controllers
         [HttpPost]
         public IActionResult Save(Employee model, string birthDateInput = "", IFormFile? uploadPhoto = null) // nhieu qua nên moi xai model
         {
-            //Xử lý ngày sinh
+            if (string.IsNullOrWhiteSpace(model.FullName))
+                ModelState.AddModelError("FullName", "Tên không được để trống"); //tên lỗi + thông báo lỗi
+            if (string.IsNullOrWhiteSpace(model.Phone))
+                ModelState.AddModelError("Phone", "Số điện thoại không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Email))
+                ModelState.AddModelError("Email", "Email không được để trống");
+            if (string.IsNullOrWhiteSpace(model.Address))
+                ModelState.AddModelError("Address", "Vui lòng nhập địa chỉ");
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Title = model.EmployeeID == 0 ? "Bổ sung nhân viên" : "cập nhật thông tin nhân viên";
+                return View("Edit", model);
+            }
             DateTime? d = birthDateInput.ToDateTime();
             if (d.HasValue)
                 model.BirthDate = d.Value;
@@ -76,10 +90,21 @@ namespace SV20T1020639.Web.Controllers
             if (model.EmployeeID == 0)
             {
                 int id = CommonDataService.AddEmployee(model);
+                if (id < 0)
+                {
+                    ModelState.AddModelError("Email", "Email bị trùng");
+                    ViewBag.Title = CREATE_TITLE;
+                    return View("Edit", model);
+                }
             }
             else
             {
                 bool result = CommonDataService.UpdateEmployee(model);
+                if (!result)
+                {
+                    ModelState.AddModelError("Error", "Không cập nhật được nhân viên. Có thể email bị trùng");
+                    return View("Edit", model);
+                }
             }
             return RedirectToAction("Index");
         } //Ctrl + R + R , refactor thay đổi đồng bộ

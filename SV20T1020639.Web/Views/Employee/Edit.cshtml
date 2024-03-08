@@ -11,6 +11,8 @@
                 <label class="control-label col-sm-2">Họ và tên:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="FullName" autofocus value="@Model.FullName" />
+                    @Html.ValidationMessageFor(m => m.FullName,"", new {@style = "color:#f00" })
+
                 </div>
             </div>
 
@@ -27,6 +29,7 @@
                 <label class="control-label col-sm-2">Địa chỉ:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="Address" value="@Model.Address" />
+                    @Html.ValidationMessageFor(m => m.Address,"", new {@style = "color:#f00" })
                 </div>
             </div>
 
@@ -35,6 +38,7 @@
                 <label class="control-label col-sm-2">Điện thoại:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="Phone" value="@Model.Phone" />
+                    @Html.ValidationMessageFor(m => m.Phone,"", new {@style = "color:#f00" })
                 </div>
             </div>
 
@@ -42,6 +46,7 @@
                 <label class="control-label col-sm-2">Email:</label>
                 <div class="col-sm-10">
                     <input type="email" class="form-control" name="Email" value="@Model.Email" />
+                    @Html.ValidationMessage("Email", new {@style = "color:#f00" })
                 </div>
             </div>
 
@@ -83,7 +88,7 @@
                     </a>
                 </div>
             </div>
-
+            @Html.ValidationMessage("Error", new {@style = "color:#f00" })
         </form>
 
     </div>
