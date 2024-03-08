@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SV20T1020639.BusinessLayers;
 using SV20T1020639.DomainModels;
+using SV20T1020639.Web.Models;
 
 namespace SV20T1020639.Web.Controllers
 {
@@ -9,20 +10,37 @@ namespace SV20T1020639.Web.Controllers
         const int PAGE_SIZE = 20;
         const string CREATE_TITLE = " nhập loại hàng mới";
 
-        public IActionResult Index(int page = 1, string searchValue = "")
+        const string CATEGORY_SEARCH = "category_search";//session dùng để lưu lại điều kiện tìm kiếm
+        public IActionResult Index()
+        {
+            Models.PaginationSearchInput? input = ApplicationContext.GetSessionData<PaginationSearchInput>(CATEGORY_SEARCH);
+            if (input == null)
+            {
+                input = new PaginationSearchInput()
+                {
+                    Page = 1,
+                    PageSize = PAGE_SIZE,
+                    SearchValue = ""
+                };
+            }
+            return View(input);
+        }
+        public IActionResult Search(PaginationSearchInput input)
         {
             int rowCount = 0;
-            var data = CommonDataService.ListOfCategories(out rowCount, page, PAGE_SIZE, searchValue ?? "");
-            var model = new Models.CategorySearchResult()
+            var data = CommonDataService.ListOfCategories(out rowCount, input.Page, input.PageSize, input.SearchValue ?? "");
+            var model = new CategorySearchResult()
             {
-                Page = page,
-                PageSize = PAGE_SIZE,
-                SearchValue = searchValue ?? "",
+                Page = input.Page,
+                PageSize = input.PageSize,
+                SearchValue = input.SearchValue ?? "",
                 RowCount = rowCount,
                 Data = data
 
             };
-            return View(model); // dữ liệu truyền cho View có kiểu dữ liệu Model.CategorySearchResult
+
+            ApplicationContext.SetSessionData(CATEGORY_SEARCH, input);
+            return View(model);
         }
         public IActionResult Create()
         {

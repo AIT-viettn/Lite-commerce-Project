@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SV20T1020639.BusinessLayers;
 using SV20T1020639.DomainModels;
+using SV20T1020639.Web.Models;
 
 namespace SV20T1020639.Web.Controllers
 {
@@ -8,22 +9,37 @@ namespace SV20T1020639.Web.Controllers
     {
         const int PAGE_SIZE = 20;
         const string CREATE_TITLE = " nhập nhân viên mới";
-        public IActionResult Index(int page = 1, string searchValue = "")
+        const string EMPLOYEE_SEARCH = "employee_search";//session dùng để lưu lại điều kiện tìm kiếm
+        public IActionResult Index()
         {
-
-
-            int rowCount = 0;
-            var data = CommonDataService.ListOfEmployees(out rowCount, page, PAGE_SIZE, searchValue ?? "");
-            var model = new Models.EmployeeSearchResult()
+            Models.PaginationSearchInput? input = ApplicationContext.GetSessionData<PaginationSearchInput>(EMPLOYEE_SEARCH);
+            if (input == null)
             {
-                Page = page,
-                PageSize = PAGE_SIZE,
-                SearchValue = searchValue ?? "",
+                input = new PaginationSearchInput()
+                {
+                    Page = 1,
+                    PageSize = PAGE_SIZE,
+                    SearchValue = ""
+                };
+            }
+            return View(input);
+        }
+        public IActionResult Search(PaginationSearchInput input)
+        {
+            int rowCount = 0;
+            var data = CommonDataService.ListOfEmployees(out rowCount, input.Page, input.PageSize, input.SearchValue ?? "");
+            var model = new EmployeeSearchResult()
+            {
+                Page = input.Page,
+                PageSize = input.PageSize,
+                SearchValue = input.SearchValue ?? "",
                 RowCount = rowCount,
                 Data = data
 
             };
-            return View(model); // dữ liệu truyền cho View có kiểu dữ liệu Model.EmployeeSearchResult
+
+            ApplicationContext.SetSessionData(EMPLOYEE_SEARCH, input);
+            return View(model);
         }
         public IActionResult Create()
         {

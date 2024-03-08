@@ -31,6 +31,7 @@ namespace SV20T1020639.Web.Models
     public class CustomerSearchResult : BasePaginationResult
     {
         public List<Customer> Data { get; set; } = new List<Customer>();
+
     }
     public class EmployeeSearchResult : BasePaginationResult
     {

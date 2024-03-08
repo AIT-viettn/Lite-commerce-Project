@@ -1,24 +1,17 @@
-﻿@model SV20T1020639.Web.Models.CustomerSearchResult
+﻿@model SV20T1020639.Web.Models.ShipperSearchResult
 @{
     Layout = null;
 }
-
-<!--Hien thi ket qua tim kiem-->
 <div>
     <p style="margin:10px 0 10px 0">
-        Có <strong>@Model.RowCount</strong> khách hàng trong tổng số <strong>@Model.PageCount</strong> trang
+        Có <strong>@Model.RowCount</strong> đơn vị giao hàng trong tổng số <strong>@Model.PageCount</strong> trang
     </p>
     <div class="table-reponsive">
         <table class="table table-bordered table-hover table-striped">
             <thead>
                 <tr class="bg-primary">
-                    <th>Tên khách hàng</th>
-                    <th>Tên giao dịch</th>
+                    <th>Tên đơn vị giao hàng</th>
                     <th>Điện thoại</th>
-                    <th>Email</th>
-                    <th>Địa chỉ</th>
-                    <th>Tỉnh/thành</th>
-                    <th>Bị khóa?</th>
                     <th style="width:80px"></th>
                 </tr>
             </thead>
@@ -26,18 +19,13 @@
                 @foreach (var item in Model.Data)
                 {
                     <tr>
-                        <td>@item.CustomerName</td>
-                        <td>@item.ContactName</td>
+                        <td>@item.ShipperName</td>
                         <td>@item.Phone</td>
-                        <td>@item.Email</td>
-                        <td>@item.Address</td>
-                        <td>@item.Province</td>
-                        <td></td>
                         <td class="text-right">
-                            <a href="~/Customer/Edit/@item.CustomerID" class="btn btn-xs btn-info">
+                            <a href="~/Shipper/Edit/@item.ShipperID" class="btn btn-xs btn-info">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <a href="~/Customer/Delete/@item.CustomerID" class="btn btn-xs btn-danger">
+                            <a href="~/Shipper/Delete/@item.ShipperID" class="btn btn-xs btn-danger">
                                 <i class="fa fa-remove"></i>
                             </a>
                         </td>
@@ -59,7 +47,7 @@
                     else
                     {
                         <li><a href="javascript:;" onclick="doSearch('#formSearch',@p)">@p</a></li>
-                     //   <li><a href="~/Customer?page=@p&searchValue=@Model.SearchValue">@p</a></li>
+                        @*  <li><a href="~/Shipper?page=@p&searchValue=@Model.SearchValue">@p</a></li>*@
                     }
                 }
             }
