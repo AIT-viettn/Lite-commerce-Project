@@ -1,8 +1,14 @@
-﻿@model SV20T1020639.DomainModels.Product
+﻿@* @model SV20T1020639.DomainModels.Product
 @{
-
+    ViewData["TotalModel"] = new SV20T1020639.Web.Models.ProductTotal();
 }
+@{
+    var totalModel = ViewData["TotalModel"] as SV20T1020639.Web.Models.ProductTotal;
+    // Sử dụng totalModel ở đây
+} @* // su dung nhung kh dong bộ *@ 
 
+@model SV20T1020639.Web.Models.ProductTotal
+@{}
 <div class="box box-primary">
 
     <div class="box-header with-border ">
@@ -17,13 +23,13 @@
     <div class="box-body">
         <form class="form-horizontal" action="~/Product/Save" method="post" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
-            <input type="hidden" name="ProductID" value="@Model.ProductID" />
+            <input type="hidden" name="ProductID" value="@Model.Product.ProductID" />
             <div class="form-group">
                 <label class="control-label col-sm-2">Tên mặt hàng:</label>
                 <div class="col-sm-10">
                     @*  <input type="text" class="form-control" autofocus name="ProductName"> *@
-                    @Html.TextBoxFor(m => m.ProductName, new {@class = "form-control", @autofocus = "true"})
-                    @Html.ValidationMessageFor(m => m.ProductName, "", new { @style = "color: #f00;" })
+                    @Html.TextBoxFor(m => m.Product.ProductName, new {@class = "form-control", @autofocus = "autofocus"})
+                    @Html.ValidationMessageFor(m => m.Product.ProductName, "", new { @style = "color: #f00;" })
                 </div>
             </div>
 
@@ -31,7 +37,7 @@
                 <label class="control-label col-sm-2">Mô tả:</label>
                 <div class="col-sm-10">
                     @* <textarea class="form-control" rows="3" name="ProductDescription"></textarea> *@
-                    @Html.TextAreaFor(m => m.ProductDescription, new { @class = "form-control", rows = 3 })
+                    @Html.TextAreaFor(m => m.Product.ProductDescription, new { @class = "form-control", rows = 3 })
                 </div>
             </div>
 
@@ -43,8 +49,8 @@
                     <option>Mỹ phẩm</option>
                     <option>Thực phẩm</option>
                     </select> *@
-                    @Html.DropDownListFor(m => m.CategoryID, SelectListHelper.Categories(),new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.CategoryID, "", new { @style = "color: #f00;" })
+                    @Html.DropDownListFor(m => m.Product.CategoryID, SelectListHelper.Categories(),new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Product.CategoryID, "", new { @style = "color: #f00;" })
                 </div>
             </div>
 
@@ -56,8 +62,8 @@
                     <option>Công ty TNHH Thành Công</option>
                     <option>Vina Foods</option>
                     </select> *@
-                    @Html.DropDownListFor(m => m.SupplierID, SelectListHelper.Suppliers(),new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.SupplierID, "", new { @style = "color: #f00;" })
+                    @Html.DropDownListFor(m => m.Product.SupplierID, SelectListHelper.Suppliers(),new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Product.SupplierID, "", new { @style = "color: #f00;" })
                 </div>
             </div>
 
@@ -65,8 +71,8 @@
                 <label class="control-label col-sm-2">Đơn vị tính:</label>
                 <div class="col-sm-10">
                     @* <input type="text" class="form-control" name="Unit"> *@
-                    @Html.TextBoxFor(m => m.Unit, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Unit, "", new { @style = "color: #f00;" })
+                    @Html.TextBoxFor(m => m.Product.Unit, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Product.Unit, "", new { @style = "color: #f00;" })
                 </div>
             </div>
 
@@ -74,15 +80,15 @@
                 <label class="control-label col-sm-2">Giá hàng:</label>
                 <div class="col-sm-10">
                     @* <input type="text" class="form-control" name="Price"> *@
-                    @Html.TextBoxFor(m => m.Price, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Price, "", new { @style = "color: #f00;" })
+                    @Html.TextBoxFor(m => m.Product.Price, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Product.Price, "", new { @style = "color: #f00;" })
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" value="true" @(Model.IsSelling ? "checked" : "") name="IsSelling" />
+                            <input type="checkbox" value="true" @(Model.Product.IsSelling ? "checked" : "") name="IsSelling" />
                             Hiện đang được bán
                         </label>
                     </div>
@@ -94,14 +100,14 @@
                 <div class="col-sm-10">
                     <input type="file" class="form-control" name="uploadPhoto" accept="image/*"
                            onchange="document.getElementById('Photo').src = window.URL.createObjectURL(this.files[0])" />
-                    @Html.ValidationMessageFor(m => m.Photo, "", new { @style = "color: #f00;" })
+                    @Html.ValidationMessageFor(m => m.Product.Photo, "", new { @style = "color: #f00;" })
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
                     @* <input type="hidden" name="Photo" value="fashion3.jpg" /> *@
-                    <img id="Photo" src="~/images/products/@Model.Photo" class="img img-bordered" style="width:200px" />
+                    <img id="Photo" src="~/images/products/@Model.Product.Photo" class="img img-bordered" style="width:200px" />
                 </div>
             </div>
 
@@ -115,10 +121,9 @@
                     </a>
                 </div>
             </div>
+            @Html.ValidationMessage("Error", new {@style = "color:#f00" })
         </form>
-
     </div>
-
 </div>
 
 @if (ViewBag.IsEdit)
@@ -141,29 +146,30 @@
                         <th>Thứ tự hiển thị</th>
                         <th>Ẩn ảnh</th>
                         <th class="text-right">
-                            <a class="btn btn-xs btn-primary" href="~/Product/Photo/123?method=add">
+                            <a class="btn btn-xs btn-primary" href="~/Product/Photo/add/@Model.Product.ProductID">
                                 <i class="fa fa-plus"></i>
                             </a>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @for (int i = 1; i <= 3; i++)
+                    @foreach (var item in Model.ProductPhotos)
                     {
                         <tr>
                             <td style="vertical-align:middle">
-                                <img src="~/Images/Products/fashion3.jpg" alt="MacBookPro" style="width:100px" />
+                                <img src="@item.Photo" alt="@item.PhotoID" style="width:100px" />
                             </td>
                             <td style="vertical-align:middle;">
-                                Fashion 2023
+                                @item.Description
                             </td>
-                            <td style="vertical-align:middle;">@i</td>
-                            <td style="vertical-align:middle;"></td>
+                            <td style="vertical-align:middle;">@item.DisplayOrder</td>
+                            <td style="vertical-align:middle;">@(item.IsHidden ? "Đã bị ẩn" : "Đang hiện")</td>
                             <td style="vertical-align:middle; text-align:right">
-                                <a class="btn btn-xs btn-primary" href="~/Product/Photo/123?method=edit&photoId=456">
+                                <a class="btn btn-xs btn-primary" href="~/Product/Photo/edit/@item.ProductID/@item.PhotoID">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                                <a class="btn btn-xs btn-danger" href="~/Product/Photo/123?method=delete&photoId=456" onclick="return confirm('Xóa ảnh của mặt hàng hay không?')">
+                                <a class="btn btn-xs btn-danger" href="~/Product/Photo/delete/@item.ProductID/@item.PhotoID"
+                                   onclick="return confirm('Xóa ảnh của mặt hàng hay không?')">
                                     <i class="fa fa-remove"></i>
                                 </a>
                             </td>
@@ -194,24 +200,25 @@
                         <th>Giá trị thuộc tính</th>
                         <th>Thứ tự hiển thị</th>
                         <th class="text-right">
-                            <a class="btn btn-xs btn-primary" href="~/Product/Attribute/123?method=add">
+                            <a class="btn btn-xs btn-primary" href="~/Product/Attribute/add/@Model.Product.ProductID">
                                 <i class="fa fa-plus"></i>
                             </a>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @for (int i = 1; i <= 5; i++)
+                    @foreach (var item in Model.ProductAttributes)
                     {
                         <tr>
-                            <td style="vertical-align:middle">giày thể thao</td>
-                            <td style="vertical-align:middle;">mẫu mã mới ra </td>
-                            <td style="vertical-align:middle;">1</td>
+                            <td style="vertical-align:middle">@item.AttributeName</td>
+                            <td style="vertical-align:middle;">@item.AttributeValue</td>
+                            <td style="vertical-align:middle;">@item.DisplayOrder</td>
                             <td style="vertical-align:middle; text-align:right">
-                                <a class="btn btn-xs btn-primary" href="~/Product/Attribute/123?method=edit&attributeId=456">
+                                <a class="btn btn-xs btn-primary" href="~/Product/Attribute/edit/@item.ProductID/@item.AttributeID">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                                <a class="btn btn-xs btn-danger" href="~/Product/Attribute/123?method=delete&attributeId=456" onclick="return confirm('Xóa thuộc tính này của mặt hàng?')">
+                                <a class="btn btn-xs btn-danger" href="~/Product/Attribute/delete/@item.ProductID/@item.AttributeID"
+                                   onclick="return confirm('Xóa thuộc tính này của mặt hàng?')">
                                     <i class="fa fa-remove"></i>
                                 </a>
                             </td>
@@ -225,3 +232,4 @@
 
     </div>
 }
+

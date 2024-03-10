@@ -50,15 +50,21 @@ namespace SV20T1020639.Web.Controllers
         {
             ViewBag.IsEdit = false;
             ViewBag.Title = "Bổ sung thông tin mặt hàng";
-            var model = new Product()
 
+            Models.ProductTotal model = new Models.ProductTotal()
             {
-                Photo = "nophoto1.jpg",
-                ProductID = 0,
+                Product = new DomainModels.Product // Tạo đối tượng Product mới
+                {
+                    Photo = "nophoto1.jpg",
+                    ProductID = 0
+                },
+                ProductAttributes = new List<DomainModels.ProductAttribute>(), // Khởi tạo List
+                ProductPhotos = new List<DomainModels.ProductPhoto>() // Khởi tạo List
             };
 
-            return View("Edit",model);
+            return View("Edit", model);
         }
+
         public IActionResult Edit(int id = 0)
         {
             ViewBag.IsEdit = true;
@@ -78,25 +84,25 @@ namespace SV20T1020639.Web.Controllers
             };
             return View(model);
         }
-        public IActionResult Save(Product model, IFormFile? uploadPhoto = null) // nhieu qua nên moi xai model
+        public IActionResult Save(ProductTotal model, IFormFile? uploadPhoto = null) // nhieu qua nên moi xai model
         {
-            if (string.IsNullOrWhiteSpace(model.ProductName))
-                ModelState.AddModelError("ProductName", "Tên cùa mặt hàng không được để trống"); //tên lỗi + thông báo lỗi
-            if (model.CategoryID == 0)
-                ModelState.AddModelError("CategoryID", "vui lòng chọn loại hàng");
-            if (model.SupplierID == 0)
-                ModelState.AddModelError("SupplierID", "vui lòng chọn nhà cung cấp");
-            if (string.IsNullOrWhiteSpace(model.Unit))
+            if (string.IsNullOrWhiteSpace(model.Product.ProductName))
+                ModelState.AddModelError("Product.ProductName", "Tên cùa mặt hàng không được để trống"); //tên lỗi + thông báo lỗi
+            if (model.Product.CategoryID == 0)
+                ModelState.AddModelError("Product.CategoryID", "vui lòng chọn loại hàng");
+            if (model.Product.SupplierID == 0)
+                ModelState.AddModelError("Product.SupplierID", "vui lòng chọn nhà cung cấp");
+            if (string.IsNullOrWhiteSpace(model.Product.Unit))
             {
-                ModelState.AddModelError("Unit", "Đơn vị tính của mặt hàng không được để trống");
+                ModelState.AddModelError("Product.Unit", "Đơn vị tính của mặt hàng không được để trống");
             }
-            if (model.Price == 0)
+            if (model.Product.Price == 0)
             {
-                ModelState.AddModelError("Price", "Giá của mặt hàng không được để trống");
+                ModelState.AddModelError("Product.Price", "Giá của mặt hàng không được để trống");
             }
-            if (model.ProductID == 0 && model.Photo == null)
+            if (model.Product.ProductID == 0 && model.Product.Photo == null)
             {
-                ModelState.AddModelError("Photo", "Vui lòng thêm ảnh");
+                ModelState.AddModelError("Product.Photo", "Vui lòng thêm ảnh");
             }
 
             if (uploadPhoto != null)
@@ -112,30 +118,43 @@ namespace SV20T1020639.Web.Controllers
                     uploadPhoto.CopyTo(stream);
                 }
                 //Gán tên file ảnh cho model.Photo
-                model.Photo = fileName;
+                model.Product.Photo = fileName;
             }
 
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Title = model.ProductID == 0 ? "Bổ sung mặt hàng" : "cập nhật thông tin mặt hàng";
+                ViewBag.Title = model.Product.ProductID == 0 ? "Bổ sung mặt hàng" : "cập nhật thông tin mặt hàng";
                 return View("Edit", model);
             }
-            if (model.ProductID == 0)
+            if (model.Product.ProductID == 0)
             {
-                int id = ProductDataServices.AddProduct(model);
+                ViewBag.IsEdit = false;
+                int id = ProductDataServices.AddProduct(model.Product);
                 if (id < 0)
                 {
-                    ModelState.AddModelError("ProductName", "Tên mặt hàng bị trùng");
+                    ModelState.AddModelError("Product.ProductName", "Tên mặt hàng bị trùng");
                     ViewBag.Title = CREATE_TITLE;
                     return View("Edit", model);
                 }
             }
             else
             {
-                bool result = ProductDataServices.UpdateProduct(model);
-                ModelState.AddModelError("Error", "Không cập nhật được mặt hàng. Có thể tên mặt hàng bị trùng");
-                return View("Edit", model);
+                ViewBag.IsEdit = true;
+                bool result = ProductDataServices.UpdateProduct(model.Product);
+                
+                /*if (!result)
+                { fix tranh null nhung van null
+                    ModelState.AddModelError("Error", "Không cập nhật được mặt hàng. Có thể tên mặt hàng bị trùng");
+                    ViewBag.Title = CREATE_TITLE;
+                    return View("Edit", model);
+                }*/
+
+                if (!result)
+                {
+                    ModelState.AddModelError("Error", "Không cập nhật được mặt hàng. Có thể tên mặt hàng bị trùng");
+                    return View("Edit", model);
+                }
             }
             return RedirectToAction("Index");
         } //Ctrl + R + R , refactor thay đổi đồng bộ
@@ -152,7 +171,7 @@ namespace SV20T1020639.Web.Controllers
                 return RedirectToAction("Index");
             return View(model);
         }
-        public IActionResult Photo(int id = 0 ,string method = "", int photoId = 0)
+        public IActionResult Photo(int id = 0 ,string method = "add", int photoId = 0)
         {
             ProductPhoto model = null;
             switch (method)
@@ -247,7 +266,7 @@ namespace SV20T1020639.Web.Controllers
             }
             return RedirectToAction("Edit", model);
         }
-        public IActionResult Attribute(int id = 0, string method = "", int attributeId = 0)
+        public IActionResult Attribute(int id = 0, string method = "add", int attributeId = 0)
         {
             ProductAttribute model = null;
             switch (method)
