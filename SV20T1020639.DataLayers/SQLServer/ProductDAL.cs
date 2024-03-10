@@ -69,7 +69,7 @@ namespace SV20T1020639.DataLayers.SQLServer
                 {
                     ProductID = data.ProductID,
                     AttributeName = data.AttributeName ?? "",
-                    AttributeValue = data.AtttributeValue ?? "",
+                    AttributeValue = data.AttributeValue ?? "",
                     DisplayOrder = data.DisplayOrder
                 };
                 id = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
@@ -410,7 +410,7 @@ namespace SV20T1020639.DataLayers.SQLServer
                     AttributeID = data.AttributeID,
                     ProductID = data.ProductID,
                     AttributeName = data.AttributeName ?? "",
-                    AttributeValue = data.AtttributeValue ?? "",
+                    AttributeValue = data.AttributeValue ?? "",
                     DisplayOrder = data.DisplayOrder
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;

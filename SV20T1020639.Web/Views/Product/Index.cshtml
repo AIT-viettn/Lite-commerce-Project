@@ -1,31 +1,49 @@
-﻿@model SV20T1020639.Web.Models.ProductSearchResult
-
-
+﻿@model SV20T1020639.Web.Models.ProductSearchInput
 @{
     ViewBag.Title = "Quản lý mặt hàng";
 }
 
 <div class="box box-primary">
     <div class="box-body">
-        <form id="formSearch" action="~/Product/Index">
+        <form id="formSearch" action="~/Product/Search" method="get" data-container="#searchResult">
+            <input type="hidden" name="@nameof(Model.PageSize)" value="@Model.PageSize" />
             <div class="row">
                 <div class="col-sm-3">
-                    <select class="form-control" name="category">
-                        <option>--Tất cả loại hàng--</option>
-                        <option>Điện gia dụng</option>
-                        <option>Thực thẩm</option>
+                    <select class="form-control" id="filterCategory" name="categoryID">
+                        @foreach (var item in SelectListHelper.Categories())
+                        {
+                            if (item.Value == Model.CategoryID.ToString())
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
                     </select>
 
                 </div>
                 <div class="col-sm-3">
-                    <select class="form-control" name="category">
-                        <option>--Tất cả nhà cung cấp--</option>
-                        <option>Cty TNHH 1 TV</option>
-                        <option>Cty TNHH 2 TV</option>
+                    <select class="form-control" id="filterSupplier" name="supplierID">
+                        @foreach (var item in SelectListHelper.Suppliers())
+                        {
+                            if (item.Value == Model.SupplierID.ToString())
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
                     </select>
                 </div>
                 <div class="col-sm-6 input-group">
-                    <input name="searchValue" type="text" class="form-control" placeholder="Nhập tên mặt hàng cần tìm" value="@Model.SearchValue">
+                    <input name="@nameof(Model.SearchValue)" type="text" class="form-control" placeholder="Nhập tên mặt hàng cần tìm"
+                           value="@Model.SearchValue">
                     <div class="input-group-btn">
                         <button class="btn btn-info" type="submit">
                             <i class="glyphicon glyphicon-search"></i>
@@ -40,58 +58,56 @@
             </div>
         </form>
         <!--Hien thi ket qua tim kiem-->
-        <div>
-            <p style="margin:10px 0 10px 0">
-                Có <strong>1,024</strong> mặt hàng trong tổng số <strong>100</strong> trang
-            </p>
-            <div class="table-reponsive">
-                <table class="table table-bordered table-hover table-striped">
-                    <thead>
-                        <tr class="bg-primary">
-                            <th style="width:80px">Ảnh</th>
-                            <th style="width:auto">Tên mặt hàng</th>
-                            <th style="width:100px">Đơn vị tính</th>
-                            <th style="width:120px">Giá</th>
-                            <th style="width:100px">Ngừng bán?</th>
-                            <th style="width:80px"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Data)
-                        {
-                            <tr>
-                                <td>
-                                    <img style="width:80px" src="~/images/products/@item.Photo" alt="Ảnh" />
-                                </td>
-                                <td>@item.ProductName
-                                    <br />
-                                    <i>@item.ProductDescription</i>
-                                </td>
-                                <td>@item.Unit</td>
-                                <td>@item.Price</td>
-                                <td></td>
-                                <td class="text-right">
-                                    <a href="~/Product/Edit/@item.ProductID" class="btn btn-xs btn-info">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    <a href="~/Product/Delete/@item.ProductID" class="btn btn-xs btn-danger">
-                                        <i class="fa fa-remove"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <div class="text-center">
-                <ul class="pagination">
-                    <li><a href="#">1</a></li>
-                    <li class="active"><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                </ul>
-            </div>
-        </div>
+        <div id="searchResult"></div>
+
     </div>
 </div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#formSearch").submit(function (e) {
+                e.preventDefault();
+                doSearch("#formSearch", 1);  // Chỉnh sửa ở đây, truyền đúng form và page
+                return;
+            });
+
+            $('#filterCategory').click(function (e) {
+                e.preventDefault();
+                doSearch("#formSearch", 1);  // Chỉnh sửa ở đây, truyền đúng form và page
+                return;
+            });
+
+            $('#filterSupplier').click(function (e) {
+                e.preventDefault();
+                doSearch("#formSearch", 1);  // Chỉnh sửa ở đây, truyền đúng form và page
+                return;
+            });
+
+            doSearch("#formSearch", @Model.Page);
+        });
+
+        function doSearch(formSearchInput, page) {
+            var url = $(formSearchInput).prop("action");
+            var container = $(formSearchInput).data("container");
+            var postData = $(formSearchInput).serializeArray();
+
+            postData.push({ "name": "page", "value": page });
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: postData,
+                error: function () {
+                    alert("Your request is not valid!");
+                },
+                success: function (data) {
+                    // Kiểm tra tính hợp lệ của dữ liệu trước khi thay đổi nội dung
+                    if (data) {
+                        $(container).html(data);
+                    } else {
+                        alert("Invalid data received from the server.");
+                    }
+                }
+            });
+        }
+    </script>
+}

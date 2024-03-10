@@ -121,7 +121,16 @@ namespace SV20T1020639.BusinessLayers
         public static long AddPhoto(ProductPhoto data)
         {
             return productDB.AddPhoto(data);
-        } 
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static bool UpdatePhoto(ProductPhoto data)
+        {
+            return productDB.UpdatePhoto(data);
+        }    
         /// <summary>
         /// 
         /// </summary>
