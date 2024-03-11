@@ -131,7 +131,7 @@ namespace SV20T1020639.BusinessLayers
         /// <returns></returns>
         public static List<Supplier> ListOfSuppliers( string searchValue = "")
         {
-            return supplierDB.List().ToList();
+            return supplierDB.List(1,0,searchValue).ToList();
         }
         /// <summary>
         /// Lấy thông tin 1 nhà cung cấp thông qua mã nhà cung cấp
@@ -343,7 +343,7 @@ namespace SV20T1020639.BusinessLayers
         /// <returns></returns>
         public static List<Category> ListOfCategories( string searchValue = "")
         {
-            return categoryDB.List().ToList();
+            return categoryDB.List(1,0,searchValue).ToList();
         }
         /// <summary>
         /// Lấy thông tin của 1 loại hàng thông qua mã loại hàng

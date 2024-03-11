@@ -93,7 +93,7 @@ namespace SV20T1020639.DataLayers
         /// </summary>
         /// <param name="productID"></param>
         /// <returns></returns>
-        bool DeletePhoto(long productID);
+        bool DeletePhoto(long photoID);
         /// <summary>
         /// Lấy danh sách các thuộc tính của mặt hàng, sắp xếp theo thứ tự của DisplayOrder
         /// </summary>
@@ -123,7 +123,7 @@ namespace SV20T1020639.DataLayers
         /// </summary>
         /// <param name="productID"></param>
         /// <returns></returns>
-        bool DeleteAtrribute(long productID);
+        bool DeleteAtrribute(long attributeID);
 
     }
 }

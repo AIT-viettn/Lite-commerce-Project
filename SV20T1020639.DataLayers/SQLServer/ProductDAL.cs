@@ -162,15 +162,15 @@ namespace SV20T1020639.DataLayers.SQLServer
 
         }
 
-        public bool DeleteAtrribute(long productID)
+        public bool DeleteAtrribute(long attributeID)
         {
             bool result = false;
             using (var connection = OpenConnection())
             {
-                var sql = @"delete from ProductAttributes where ProductID = @productID";
+                var sql = @"delete from ProductAttributes where AttributeID = @attributeID";
                 var parameters = new
                 {
-                    ProductID = productID
+                    AttributeID = attributeID
                 };
                 // thực thi câu lệnh
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
@@ -179,15 +179,15 @@ namespace SV20T1020639.DataLayers.SQLServer
             return result;
         }
 
-        public bool DeletePhoto(long productID)
+        public bool DeletePhoto(long photoID)
         {
             bool result = false;
             using (var connection = OpenConnection())
             {
-                var sql = @"delete from ProductPhotos where ProductID = @productID";
+                var sql = @"delete from ProductPhotos where PhotoID = @photoID";
                 var parameters = new
                 {
-                    ProductID = productID
+                    PhotoID = photoID
                 };
                 // thực thi câu lệnh
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;

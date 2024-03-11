@@ -52,8 +52,8 @@ namespace SV20T1020639.Web.Models
     public class ProductSearchResult : BasePaginationResult
     {
         public List<Product> Data { get; set; } = new List<Product>();
-        /*public int CategoryID { get; set; } = 0;
-        public int SupplierID { get; set; } = 0;*/
+        public int CategoryID { get; set; } = 0;
+        public int SupplierID { get; set; } = 0;
     }
 
 }

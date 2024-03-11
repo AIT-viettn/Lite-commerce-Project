@@ -1,18 +1,13 @@
-﻿@* @model SV20T1020639.DomainModels.Product
+﻿@model SV20T1020639.DomainModels.Product
 @{
-    ViewData["TotalModel"] = new SV20T1020639.Web.Models.ProductTotal();
-}
-@{
-    var totalModel = ViewData["TotalModel"] as SV20T1020639.Web.Models.ProductTotal;
-    // Sử dụng totalModel ở đây
-} @* // su dung nhung kh dong bộ *@ 
 
-@model SV20T1020639.Web.Models.ProductTotal
-@{}
+}
+
 <div class="box box-primary">
 
     <div class="box-header with-border ">
         <h3 class="box-title">Thông tin mặt hàng</h3>
+        @* @Html.ValidationSummary("", new { @style = "color:#f00" }) *@
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
                 <i class="fa fa-minus"></i>
@@ -22,73 +17,58 @@
 
     <div class="box-body">
         <form class="form-horizontal" action="~/Product/Save" method="post" enctype="multipart/form-data">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="ProductID" value="@Model.Product.ProductID" />
+            <input type="hidden" name="@nameof(Model.ProductID)" value="@Model.ProductID" />
             <div class="form-group">
                 <label class="control-label col-sm-2">Tên mặt hàng:</label>
                 <div class="col-sm-10">
-                    @*  <input type="text" class="form-control" autofocus name="ProductName"> *@
-                    @Html.TextBoxFor(m => m.Product.ProductName, new {@class = "form-control", @autofocus = "autofocus"})
-                    @Html.ValidationMessageFor(m => m.Product.ProductName, "", new { @style = "color: #f00;" })
+                    <input type="text" class="form-control" autofocus name="@nameof(Model.ProductName)" value="@Model.ProductName">
+                    @Html.ValidationMessageFor(m => m.ProductName, "", new { @style = "color:#f00" })
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Mô tả:</label>
                 <div class="col-sm-10">
-                    @* <textarea class="form-control" rows="3" name="ProductDescription"></textarea> *@
-                    @Html.TextAreaFor(m => m.Product.ProductDescription, new { @class = "form-control", rows = 3 })
+                    <textarea class="form-control" rows="3" name="@nameof(Model.ProductDescription)" value="@Model.ProductDescription">@Model.ProductDescription</textarea>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Loại hàng:</label>
                 <div class="col-sm-10">
-                    @* <select class="form-control" name="CategoryId">
-                    <option>-- Loại hàng --</option>
-                    <option>Mỹ phẩm</option>
-                    <option>Thực phẩm</option>
-                    </select> *@
-                    @Html.DropDownListFor(m => m.Product.CategoryID, SelectListHelper.Categories(),new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Product.CategoryID, "", new { @style = "color: #f00;" })
+                    @Html.DropDownListFor(m => m.CategoryID, SelectListHelper.Categories(), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.CategoryID, "", new { @style = "color:#f00" })
+
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Nhà cung cấp:</label>
                 <div class="col-sm-10">
-                    @*  <select class="form-control" name="SupplierID">
-                    <option>-- Nhà cung cấp --</option>
-                    <option>Công ty TNHH Thành Công</option>
-                    <option>Vina Foods</option>
-                    </select> *@
-                    @Html.DropDownListFor(m => m.Product.SupplierID, SelectListHelper.Suppliers(),new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Product.SupplierID, "", new { @style = "color: #f00;" })
+                    @Html.DropDownListFor(m => m.SupplierID, SelectListHelper.Suppliers(), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.SupplierID, "", new { @style = "color:#f00" })
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Đơn vị tính:</label>
                 <div class="col-sm-10">
-                    @* <input type="text" class="form-control" name="Unit"> *@
-                    @Html.TextBoxFor(m => m.Product.Unit, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Product.Unit, "", new { @style = "color: #f00;" })
+                    <input type="text" class="form-control" name="@nameof(Model.Unit)" value="@Model.Unit">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Giá hàng:</label>
                 <div class="col-sm-10">
-                    @* <input type="text" class="form-control" name="Price"> *@
-                    @Html.TextBoxFor(m => m.Product.Price, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Product.Price, "", new { @style = "color: #f00;" })
+                    <input type="text" class="form-control" name="@nameof(Model.Price)" value="@Model.Price">
                 </div>
             </div>
+
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" value="true" @(Model.Product.IsSelling ? "checked" : "") name="IsSelling" />
+                            <input type="checkbox" checked name="@nameof(Model.IsSelling)" value="true" @(Model.IsSelling ? "checked" : "") />
                             Hiện đang được bán
                         </label>
                     </div>
@@ -98,16 +78,15 @@
             <div class="form-group">
                 <label class="control-label col-sm-2">Ảnh minh họa:</label>
                 <div class="col-sm-10">
-                    <input type="file" class="form-control" name="uploadPhoto" accept="image/*"
+                    <input type="file" class="form-control" name="uploadPhoto" accept="images/*"
                            onchange="document.getElementById('Photo').src = window.URL.createObjectURL(this.files[0])" />
-                    @Html.ValidationMessageFor(m => m.Product.Photo, "", new { @style = "color: #f00;" })
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
-                    @* <input type="hidden" name="Photo" value="fashion3.jpg" /> *@
-                    <img id="Photo" src="~/images/products/@Model.Product.Photo" class="img img-bordered" style="width:200px" />
+                    <input type="hidden" name="@nameof(Model.Photo)" value="@Model.Photo" />
+                    <img id="Photo" src="~/images/products/@Model.Photo" class="img img-bordered" style="width:200px" />
                 </div>
             </div>
 
@@ -116,14 +95,15 @@
                     <button type="submit" class="btn btn-primary">
                         <i class="fa fa-save"></i> Lưu dữ liệu
                     </button>
-                    <a href="~/Product" class="btn btn-default">
+                    <a class="btn btn-default" href="~/Product">
                         Quay lại
                     </a>
                 </div>
             </div>
-            @Html.ValidationMessage("Error", new {@style = "color:#f00" })
         </form>
+
     </div>
+
 </div>
 
 @if (ViewBag.IsEdit)
@@ -146,30 +126,29 @@
                         <th>Thứ tự hiển thị</th>
                         <th>Ẩn ảnh</th>
                         <th class="text-right">
-                            <a class="btn btn-xs btn-primary" href="~/Product/Photo/add/@Model.Product.ProductID">
+                            <a class="btn btn-xs btn-primary" href="~/Product/Photo/@Model.ProductID?method=add">
                                 <i class="fa fa-plus"></i>
                             </a>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.ProductPhotos)
+                    @foreach (var item in SV20T1020639.BusinessLayers.ProductDataServices.ListPhotos(Model.ProductID))
                     {
                         <tr>
                             <td style="vertical-align:middle">
-                                <img src="@item.Photo" alt="@item.PhotoID" style="width:100px" />
+                                <img src="~/images/products/@item.Photo" alt="@nameof(item.Photo)" style="width:100px" />
                             </td>
                             <td style="vertical-align:middle;">
                                 @item.Description
                             </td>
                             <td style="vertical-align:middle;">@item.DisplayOrder</td>
-                            <td style="vertical-align:middle;">@(item.IsHidden ? "Đã bị ẩn" : "Đang hiện")</td>
+                            <td style="vertical-align:middle;">@(item.IsHidden ? "Không" : "Có")</td>
                             <td style="vertical-align:middle; text-align:right">
-                                <a class="btn btn-xs btn-primary" href="~/Product/Photo/edit/@item.ProductID/@item.PhotoID">
+                                <a class="btn btn-xs btn-primary" href="~/Product/Photo/@Model.ProductID?method=edit&photoId=@item.PhotoID">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                                <a class="btn btn-xs btn-danger" href="~/Product/Photo/delete/@item.ProductID/@item.PhotoID"
-                                   onclick="return confirm('Xóa ảnh của mặt hàng hay không?')">
+                                <a class="btn btn-xs btn-danger" href="~/Product/Photo/@Model.ProductID?method=delete&photoId=@item.PhotoID" onclick="return confirm('Xóa ảnh của mặt hàng hay không?')">
                                     <i class="fa fa-remove"></i>
                                 </a>
                             </td>
@@ -180,7 +159,7 @@
         </div>
 
     </div>
-
+    <div></div>
     <div class="box box-info">
 
         <div class="box-header with-border ">
@@ -200,25 +179,24 @@
                         <th>Giá trị thuộc tính</th>
                         <th>Thứ tự hiển thị</th>
                         <th class="text-right">
-                            <a class="btn btn-xs btn-primary" href="~/Product/Attribute/add/@Model.Product.ProductID">
+                            <a class="btn btn-xs btn-primary" href="~/Product/Attribute/@Model.ProductID?method=add">
                                 <i class="fa fa-plus"></i>
                             </a>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.ProductAttributes)
+                    @foreach (var item in SV20T1020639.BusinessLayers.ProductDataServices.ListAttributes(@Model.ProductID))
                     {
                         <tr>
                             <td style="vertical-align:middle">@item.AttributeName</td>
                             <td style="vertical-align:middle;">@item.AttributeValue</td>
                             <td style="vertical-align:middle;">@item.DisplayOrder</td>
                             <td style="vertical-align:middle; text-align:right">
-                                <a class="btn btn-xs btn-primary" href="~/Product/Attribute/edit/@item.ProductID/@item.AttributeID">
+                                <a class="btn btn-xs btn-primary" href="~/Product/Attribute/@Model.ProductID?method=edit&attributeId=@item.AttributeID">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                                <a class="btn btn-xs btn-danger" href="~/Product/Attribute/delete/@item.ProductID/@item.AttributeID"
-                                   onclick="return confirm('Xóa thuộc tính này của mặt hàng?')">
+                                <a class="btn btn-xs btn-danger" href="~/Product/Attribute/@Model.ProductID?method=delete&attributeId=@item.AttributeID" onclick="return confirm('Xóa thuộc tính này của mặt hàng?')">
                                     <i class="fa fa-remove"></i>
                                 </a>
                             </td>
@@ -232,4 +210,3 @@
 
     </div>
 }
-

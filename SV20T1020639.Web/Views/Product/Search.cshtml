@@ -2,22 +2,27 @@
 @{
     Layout = null;
 }
+
+<!-- Hiển thị kết quả tìm kiếm -->
 <div>
-    <p style="margin:10px 0 10px 0">
-        Có <strong>@Model.RowCount</strong> mặt hàng trong tổng số <strong>@Model.PageCount</strong> trang
+    <p style="margin: 10px 0 10px 0">
+        Có <strong>@Model.RowCount</strong> mặt hàng trong số <strong>@Model.PageCount</strong> trang
     </p>
-    <div class="table-reponsive">
-        <table class="table table-bordered table-hover table-striped">
+    <div class="table-responsive">
+        <table class=" table table-bordered table-hover table-striped">
+            <!--Header-->
             <thead>
                 <tr class="bg-primary">
-                    <th style="width:80px">Ảnh</th>
-                    <th style="width:auto">Tên mặt hàng</th>
-                    <th style="width:100px">Đơn vị tính</th>
-                    <th style="width:120px">Giá</th>
-                    <th style="width:100px">Ngừng bán?</th>
+                    <th style="width: 80px"> Ảnh</th>
+                    <th style="width: auto">Tên mặt hàng</th>
+                    <th style="width: 100px">Đơn vị tính</th>
+                    <th style="width: 120px">Giá</th>
+                    <th style="width: 100px">Ngừng bán</th>
                     <th style="width:80px"></th>
                 </tr>
             </thead>
+
+            <!--Body-->
             <tbody>
                 @foreach (var item in Model.Data)
                 {
@@ -25,14 +30,10 @@
                         <td>
                             <img src="~/images/products/@item.Photo" style="width: 80px; height: 80px; object-fit: cover;" />
                         </td>
-                        <td>
-                            @item.ProductName
-                            <br />
-                            <i>@item.ProductDescription</i>
-                        </td>
+                        <td>@item.ProductName</td>
                         <td>@item.Unit</td>
                         <td>@item.Price</td>
-                        <td></td>
+                        <td>@(item.IsSelling ? "Không" : "Ngừng bán")</td>
                         <td class="text-right">
                             <a href="~/Product/Edit/@item.ProductID" class="btn btn-xs btn-info">
                                 <i class="fa fa-edit"></i>
@@ -45,11 +46,13 @@
                 }
             </tbody>
         </table>
+
     </div>
-    <div class="text-center">
-        <ul class="pagination">
-            @if (Model.PageCount > 1)
-            {
+    @if (Model.PageCount > 1)
+    {
+        <div class="text-center">
+            <ul class="pagination">
+
                 @for (int p = 1; p <= Model.PageCount; p++)
                 {
                     if (Model.Page == p)
@@ -59,10 +62,10 @@
                     else
                     {
                         <li><a href="javascript:;" onclick="doSearch('#formSearch',@p)">@p</a></li>
-                        //   <li><a href="~/Customer?page=@p&searchValue=@Model.SearchValue">@p</a></li>
                     }
                 }
-            }
-        </ul>
-    </div>
+
+            </ul>
+        </div>
+    }
 </div>

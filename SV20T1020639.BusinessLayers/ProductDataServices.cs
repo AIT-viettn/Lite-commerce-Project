@@ -26,7 +26,7 @@ namespace SV20T1020639.BusinessLayers
         /// <returns></returns>
         public static List<Product> ListProducts(string searchValue = "")
         {
-            return productDB.List().ToList();    
+            return productDB.List(1, 0, searchValue).ToList();    
         }
         /// <summary>
         /// Tìm kiếm và lấy danh sách mặt hàng dưới dạng phân trang
@@ -43,7 +43,7 @@ namespace SV20T1020639.BusinessLayers
         public static List<Product> ListProducts(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "", 
             int categoryId = 0, int supplierId = 0, decimal minPrice = 0, decimal maxPrice = 0)
         {
-            rowCount = productDB.Count(searchValue);
+            rowCount = productDB.Count(searchValue, categoryId, supplierId, minPrice, maxPrice);
             return productDB.List(page, pageSize, searchValue,categoryId,supplierId,minPrice,maxPrice).ToList();
         }
         /// <summary>
