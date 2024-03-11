@@ -86,6 +86,7 @@ namespace SV20T1020639.Web.Controllers
         }
         public IActionResult Save(ProductTotal model, IFormFile? uploadPhoto = null) // nhieu qua nên moi xai model
         {
+            ViewBag.IsEdit = false;
             if (string.IsNullOrWhiteSpace(model.Product.ProductName))
                 ModelState.AddModelError("Product.ProductName", "Tên cùa mặt hàng không được để trống"); //tên lỗi + thông báo lỗi
             if (model.Product.CategoryID == 0)
@@ -121,12 +122,13 @@ namespace SV20T1020639.Web.Controllers
                 model.Product.Photo = fileName;
             }
 
-
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) // trả về true nếu trong ModelSate không tồn tại lỗi và ngược lại 
             {
-                ViewBag.Title = model.Product.ProductID == 0 ? "Bổ sung mặt hàng" : "cập nhật thông tin mặt hàng";
+                ViewBag.IsEdit = model.Product.ProductID == 0 ? false : true;
+                ViewBag.Tite = model.Product.ProductID == 0 ? CREATE_TITLE : "Cập nhật thông tin mặt hàng";
                 return View("Edit", model);
             }
+
             if (model.Product.ProductID == 0)
             {
                 ViewBag.IsEdit = false;
@@ -142,7 +144,7 @@ namespace SV20T1020639.Web.Controllers
             {
                 ViewBag.IsEdit = true;
                 bool result = ProductDataServices.UpdateProduct(model.Product);
-                
+
                 /*if (!result)
                 { fix tranh null nhung van null
                     ModelState.AddModelError("Error", "Không cập nhật được mặt hàng. Có thể tên mặt hàng bị trùng");
@@ -153,6 +155,7 @@ namespace SV20T1020639.Web.Controllers
                 if (!result)
                 {
                     ModelState.AddModelError("Error", "Không cập nhật được mặt hàng. Có thể tên mặt hàng bị trùng");
+                    ViewBag.Title = "Cập nhật mặt hàng";
                     return View("Edit", model);
                 }
             }
@@ -171,7 +174,8 @@ namespace SV20T1020639.Web.Controllers
                 return RedirectToAction("Index");
             return View(model);
         }
-        public IActionResult Photo(int id = 0 ,string method = "add", int photoId = 0)
+        
+        public IActionResult Photo(int id = 0 ,string method = "", int photoId = 0)
         {
             ProductPhoto model = null;
             switch (method)
@@ -266,7 +270,7 @@ namespace SV20T1020639.Web.Controllers
             }
             return RedirectToAction("Edit", model);
         }
-        public IActionResult Attribute(int id = 0, string method = "add", int attributeId = 0)
+        public IActionResult Attribute(int id = 0, string method = "", int attributeId = 0)
         {
             ProductAttribute model = null;
             switch (method)

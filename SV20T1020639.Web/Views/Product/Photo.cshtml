@@ -1,60 +1,85 @@
-﻿@{
+﻿@model SV20T1020639.DomainModels.ProductPhoto
+@{
 
 }
 
 <div class="box box-primary">
+
+
     <div class="box-body">
-        <form class="form-horizontal" method="post" enctype="multipart/form-data" action="#">
+        <form class="form-horizontal" action="~/Product/SavePhoto" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <input type="hidden" name="PhotoID" value="@Model.PhotoID" />
+                <input type="hidden" name="ProductID" value="@Model.ProductID" />
+                <label class="control-label col-sm-2">Ảnh:</label>
+                <div class="col-sm-10">
+                    <input type="hidden" name="Photo" value="@Model.Photo" />
+                    <input type="file" class="form-control" name="uploadPhoto"
+                           onchange="document.getElementById('Photo').src = window.URL.createObjectURL(this.files[0])" />
+                    @Html.ValidationMessageFor(m => m.Photo, "", new { @style = "color: #f00;" })
+                </div>
+            </div>
 
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
-                    <input type="hidden" name="PhotoID" value="photo.png" />
-                    <img id="Photo" src="~/images/employees/photo.png" class="img img-bordered" style="width:200px" />
-                </div>
-            </div>
-            <div class="form-group">
-
-                <div class="col-sm-10">
-                    <input type="file" class="form-control" name="uploadPhoto" accept="image/*"
-                           onchange="document.getElementById('Photo').src = window.URL.createObjectURL(this.files[0])" />
+                    <img id="Photo" src="@Model.Photo" class="img img-bordered" style="width:150px" />
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Mô tả:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="Description" autofocus />
+                    <input type="text" class="form-control" name="Description" value="@Model.Description" autofocus>
                 </div>
             </div>
 
-           
             <div class="form-group">
-                <label class="control-label col-sm-2">Thứ tự hiện thị ảnh:</label>
+                <label class="control-label col-sm-2">Thứ tự hiển thị:</label>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" name="DisplayOrder" />
+                    @if (Model.PhotoID > 0)
+                    {
+                        <input type="number" min="1" class="form-control" name="DisplayOrder" value="@Model.DisplayOrder" />
+                    }
+                    else
+                    {
+                        <input type="number" min="1" class="form-control" name="DisplayOrder" />
+                    }
+                    @Html.ValidationMessageFor(m => m.DisplayOrder, "", new { @style = "color: #f00;" })
+                </div>
+            </div>
+
+            <p>@ViewBag.error</p>
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-sm-10 checkbox">
+                    <label>
+                        @if (Model.PhotoID > 0)
+                        {
+                            <input id="isHidden" type="checkbox" name="IsHidden"
+                                   onclick="document.getElementById('isHidden').value = document.getElementById('isHidden').checked"
+                                   value="@Model.IsHidden.ToString()" @(Model.IsHidden ? "checked=\"checked\"" : "")>
+                        }
+                        else
+                        {
+                            <input id="isHidden" type="checkbox" name="IsHidden"
+                                   onclick="document.getElementById('isHidden').value = document.getElementById('isHidden').checked"
+                                   value="false" @(Model.IsHidden ? "checked=\"checked\"" : "")>
+                        }
+                        Ẩn ảnh 
+                    </label>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-sm-2">Ẩn ảnh:</label>
-                <div class="col-sm-10">
-                    <input type="checkbox"  name="IsHidden" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-lg-offset-2 col-sm-10">
+                <div class="col-sm-offset-2 col-sm-10">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-floppy-o"></i>
-                        Lưu dữ liệu
+                        <i class="fa fa-floppy-o"></i> Lưu dữ liệu
                     </button>
-                    <a href="~/Product/Edit/123" class="btn btn-default">
-                        Quay lại
+                    <a class="btn btn-warning" href="~/Product/Edit/@Model.ProductID">
+                        <i class="fa fa-ban"></i> Quay lại
                     </a>
                 </div>
             </div>
-
         </form>
-
     </div>
 </div>
