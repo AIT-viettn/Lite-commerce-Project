@@ -143,7 +143,7 @@
                                 @item.Description
                             </td>
                             <td style="vertical-align:middle;">@item.DisplayOrder</td>
-                            <td style="vertical-align:middle;">@(item.IsHidden ? "Không" : "Có")</td>
+                            <td style="vertical-align:middle;">@(item.IsHidden ? "Có" : "")</td>
                             <td style="vertical-align:middle; text-align:right">
                                 <a class="btn btn-xs btn-primary" href="~/Product/Photo/@Model.ProductID?method=edit&photoId=@item.PhotoID">
                                     <i class="fa fa-edit"></i>

@@ -4,6 +4,7 @@ using SV20T1020639.BusinessLayers;
 using SV20T1020639.DomainModels;
 using SV20T1020639.Web.Models;
 using System;
+using System.Reflection;
 
 namespace SV20T1020639.Web.Controllers
 {
@@ -14,6 +15,7 @@ namespace SV20T1020639.Web.Controllers
         const string PRODUCT_SEARCH = "product_search";//session dùng để lưu lại điều kiện tìm kiếm
         public IActionResult Index()
         {
+           
             /* int rowCount = 0;
              var data = ProductDataService.ListProducts(out rowCount, page, PAGE_SIZE, searchValue ?? "", 0, 0, 0, 0);
              var model = new Models.ProductSearchResult()
@@ -27,6 +29,7 @@ namespace SV20T1020639.Web.Controllers
              return View(model);*/
 
             Models.ProductSearchInput? input = ApplicationContext.GetSessionData<ProductSearchInput>(PRODUCT_SEARCH);
+
             if (input == null)
             {
                 input = new ProductSearchInput
@@ -42,9 +45,11 @@ namespace SV20T1020639.Web.Controllers
         }
         public IActionResult Search(ProductSearchInput input)
         {
+           
             int rowCount = 0;
             var data = ProductDataServices.ListProducts(out rowCount, input.Page, input.PageSize, input.SearchValue ?? "", input.CategoryID, input.SupplierID);
             var model = new Models.ProductSearchResult()
+
             {
                 Page = input.Page,
                 PageSize = input.PageSize,
@@ -54,6 +59,7 @@ namespace SV20T1020639.Web.Controllers
                 RowCount = rowCount,
                 Data = data
             };
+            
             ApplicationContext.SetSessionData(PRODUCT_SEARCH, input);
             return View(model);
 
@@ -66,7 +72,7 @@ namespace SV20T1020639.Web.Controllers
             var model = new Product()
             {
                 ProductID = 0,
-                Photo = "product_no_photo.png",
+                Photo = "nophoto2.jpg",
             };
             return View("Edit", model);
         }
@@ -82,7 +88,7 @@ namespace SV20T1020639.Web.Controllers
             }
             if (string.IsNullOrWhiteSpace(model.Photo))
             {
-                model.Photo = "product_no_photo.png";
+                model.Photo = "nophoto2.jpg";
             }
 
             return View(model);
@@ -136,11 +142,18 @@ namespace SV20T1020639.Web.Controllers
                     return View("Edit", model);
                 }
             }
-            else
             {
-                bool result = ProductDataServices.UpdateProduct(model);
-            }
-            return RedirectToAction("Index");
+                {
+                    bool result = ProductDataServices.UpdateProduct(model);
+                    if (!result)
+                    {
+                        ModelState.AddModelError("Error", "Không cập nhật được mặt hàng . Có thể tên mặt hàng bị trùng");
+                        ViewBag.Title = "Cập nhật mặt hàng";
+                        return View("Edit", model);
+                    }
+                } 
+                }
+                return RedirectToAction("Index");
         } //Ctrl + R + R , refactor thay đổi đồng bộ
         public IActionResult Delete(int id = 0)
         {
@@ -166,9 +179,11 @@ namespace SV20T1020639.Web.Controllers
                     model = new ProductPhoto()
                     {
                         PhotoID = 0,
-                        ProductID = id
+                        ProductID = id,
+                        Photo = "nophoto2.jpg",
                     };
                     return View(model);
+                   
                 case "edit":
                     ViewBag.Title = "Thay đổi ảnh";
                     if (photoId < 0)
@@ -176,6 +191,7 @@ namespace SV20T1020639.Web.Controllers
                         return RedirectToAction("Edit");
                     }
                     model = ProductDataServices.GetPhoto(photoId);
+                   
                     if (model == null)
                     {
                         return RedirectToAction("Index");
@@ -192,10 +208,15 @@ namespace SV20T1020639.Web.Controllers
         [HttpPost]
         public ActionResult SavePhoto(ProductPhoto model, IFormFile? uploadPhoto = null)
         {
-            if (string.IsNullOrWhiteSpace(model.DisplayOrder.ToString()))
+            if (string.IsNullOrWhiteSpace(model.Description))
+            {
+                ModelState.AddModelError(nameof(model.Description), "Mô tả ảnh mặt hàng không được để trống");
+            }
+            if (model.DisplayOrder == 0)
             {
                 ModelState.AddModelError("DisplayOrder", "Thứ tự hiển thị hình ảnh không được để trống");
             }
+
             else if (model.DisplayOrder < 1)
             {
                 ModelState.AddModelError("DisplayOrder", "Thứ tự hiển thị hình ảnh phải là một số tự nhiên dương");
@@ -216,14 +237,14 @@ namespace SV20T1020639.Web.Controllers
                     $"Thứ tự hiển thị {model.DisplayOrder} của hình ảnh đã được sử dụng trước đó");
             }
 
-            model.Description = model.Description ?? "";
+            
             model.IsHidden = Convert.ToBoolean(model.IsHidden.ToString());
             // xử lý nghiệp vụ upload file
             if (uploadPhoto != null)
             {
                 //Tên file sẽ lưu trên server
-                string fileName = $"{DateTime.Now.Ticks}_{uploadPhoto.FileName}"; //Tên file sẽ lưu trên server
-                                                                                  //Đường dẫn đến file sẽ lưu trên server 
+/*                string fileName = $"{DateTime.Now.Ticks}_{uploadPhoto.FileName}"; //Tên file sẽ lưu trên server
+*/                string fileName = $"{model.PhotoID}";                                                                //Đường dẫn đến file sẽ lưu trên server 
                 string filePath = Path.Combine(ApplicationContext.HostEnviroment.WebRootPath, @"images\products", fileName);
 
                 //Lưu file lên server
@@ -243,13 +264,25 @@ namespace SV20T1020639.Web.Controllers
             // thực hiện thêm hoặc cập nhật
             if (model.PhotoID == 0)
             {
-                ProductDataServices.AddPhoto(model);
+                long id = ProductDataServices.AddPhoto(model);
+                if (id <= 0)
+                {
+                    ModelState.AddModelError(nameof(model.Photo), "ảnh bị trùng ");
+                    ViewBag.Title = "Bổ sung mặt hàng";
+                    return View("Photo", model);
+                }
             }
             else
             {
-                ProductDataServices.UpdatePhoto(model);
+                bool result = ProductDataServices.UpdatePhoto(model);
+                if (!result)
+                {
+                    ModelState.AddModelError("Error", "Không cập nhật được ảnh mặt hàng. Có thể ảnh bị trùng");
+                    ViewBag.Title = "Cập nhật mặt hàng";
+                    return View("Photo", model);
+                }
             }
-            return RedirectToAction("Edit", model.ProductID);
+            return RedirectToAction("Edit", new { id = model.ProductID });
         }
         public IActionResult Attribute(int id = 0, string method = "", int attributeId = 0)
         {
@@ -330,13 +363,25 @@ namespace SV20T1020639.Web.Controllers
             // thực hiện thêm hoặc cập nhật
             if (model.AttributeID == 0)
             {
-                ProductDataServices.AddAttribute(model);
+                long id = ProductDataServices.AddAttribute(model);
+                if (id <= 0)
+                {
+                    ModelState.AddModelError(nameof(model.AttributeName), "Tên thuộc tính bị trùng ");
+                    return View("Attribute", model);
+                }
             }
             else
             {
                 ProductDataServices.UpdateAttribute(model);
+                bool result = ProductDataServices.UpdateAttribute(model);
+                if (!result)
+                {
+                    ModelState.AddModelError("Error", "Không cập nhật được thuộc tính. Có thể tên thuộc tính bị trùng");
+                    ViewBag.Title = "Cập nhật mặt hàng";
+                    return View("Attribute", model);
+                }
             }
-            return RedirectToAction("Edit" , model.ProductID);
+            return RedirectToAction("Edit", new { id = model.ProductID });
         }
     }
 }
