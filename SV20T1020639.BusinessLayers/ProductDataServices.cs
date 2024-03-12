@@ -28,6 +28,7 @@ namespace SV20T1020639.BusinessLayers
         {
             return productDB.List(1, 0, searchValue).ToList();    
         }
+        
         /// <summary>
         /// Tìm kiếm và lấy danh sách mặt hàng dưới dạng phân trang
         /// </summary>

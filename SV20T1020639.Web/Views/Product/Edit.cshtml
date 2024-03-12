@@ -54,6 +54,7 @@
                 <label class="control-label col-sm-2">Đơn vị tính:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="@nameof(Model.Unit)" value="@Model.Unit">
+                    @Html.ValidationMessageFor(m => m.Unit, "", new { @style = "color:#f00" })
                 </div>
             </div>
 
@@ -61,6 +62,7 @@
                 <label class="control-label col-sm-2">Giá hàng:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="@nameof(Model.Price)" value="@Model.Price">
+                    @Html.ValidationMessageFor(m => m.Price, "", new { @style = "color:#f00" })
                 </div>
             </div>
 

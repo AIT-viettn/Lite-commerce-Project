@@ -22,6 +22,7 @@ namespace SV20T1020639.DataLayers
         /// <returns></returns>
         IList<Product> List(int page = 1, int pageSize = 0 , string searchValue = "", 
             int categoryID = 0, int supplierID = 0, decimal minPrice = 0, decimal maxPrice = 0);
+        
 
         /// <summary>
         /// Đếm số lượng mặt hàng tìm kiếm được 

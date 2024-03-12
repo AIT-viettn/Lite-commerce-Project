@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SV20T1020639.BusinessLayers;
 using SV20T1020639.DomainModels;
+using SV20T1020639.Web;
 using SV20T1020639.Web.Models;
 using System;
 using System.Reflection;
@@ -15,7 +16,7 @@ namespace SV20T1020639.Web.Controllers
         const string PRODUCT_SEARCH = "product_search";//session dùng để lưu lại điều kiện tìm kiếm
         public IActionResult Index()
         {
-           
+
             /* int rowCount = 0;
              var data = ProductDataService.ListProducts(out rowCount, page, PAGE_SIZE, searchValue ?? "", 0, 0, 0, 0);
              var model = new Models.ProductSearchResult()
@@ -45,7 +46,7 @@ namespace SV20T1020639.Web.Controllers
         }
         public IActionResult Search(ProductSearchInput input)
         {
-           
+
             int rowCount = 0;
             var data = ProductDataServices.ListProducts(out rowCount, input.Page, input.PageSize, input.SearchValue ?? "", input.CategoryID, input.SupplierID);
             var model = new Models.ProductSearchResult()
@@ -59,7 +60,7 @@ namespace SV20T1020639.Web.Controllers
                 RowCount = rowCount,
                 Data = data
             };
-            
+
             ApplicationContext.SetSessionData(PRODUCT_SEARCH, input);
             return View(model);
 
@@ -95,6 +96,10 @@ namespace SV20T1020639.Web.Controllers
         }
         public IActionResult Save(Product model, IFormFile? uploadPhoto)
         {
+            if (string.IsNullOrWhiteSpace(model.Photo))
+            {
+                model.Photo = "nophoto2.jpg";
+            }
             if (string.IsNullOrWhiteSpace(model.ProductName))
             {
                 ModelState.AddModelError(nameof(model.ProductName), "Tên không được để trống");
@@ -103,9 +108,27 @@ namespace SV20T1020639.Web.Controllers
             {
                 ModelState.AddModelError(nameof(model.CategoryID), "Loại sản phẩm không được để trống");
             }
+            if (string.IsNullOrWhiteSpace(model.Unit))
+            {
+                ModelState.AddModelError(nameof(model.Unit), "Đơn vị tính không được để trống");
+            }
+            if (model.Price == 0)
+            {
+                ModelState.AddModelError(nameof(model.Price), "Giá của mặt hàng không được để trống");
+            }
             if (model.SupplierID.ToString() == "0")
             {
                 ModelState.AddModelError(nameof(model.SupplierID), "Nhà cung cấp không được để trống");
+            }
+            List<Product> list
+                = ProductDataServices.ListProducts("");
+            foreach (Product item in list)
+            {
+                if (model.ProductName == item.ProductName && model.ProductID != item.ProductID)
+                {
+                    ModelState.AddModelError(nameof(model.ProductName), $"Tên sản phẩm '{model.ProductName}' đã tồn tại.");
+                    break;
+                }
             }
             if (!ModelState.IsValid)
             {
@@ -137,24 +160,17 @@ namespace SV20T1020639.Web.Controllers
                 int id = ProductDataServices.AddProduct(model);
                 if (id <= 0)
                 {
-                    ModelState.AddModelError(nameof(model.ProductName), "Ten san pham bị trùng ");
+                    ModelState.AddModelError(nameof(model.ProductName), "Ten sản phẩm bị trùng ");
                     ViewBag.Title = "Bổ sung mặt hàng";
                     return View("Edit", model);
                 }
             }
+            else
             {
-                {
-                    bool result = ProductDataServices.UpdateProduct(model);
-                    if (!result)
-                    {
-                        ModelState.AddModelError("Error", "Không cập nhật được mặt hàng . Có thể tên mặt hàng bị trùng");
-                        ViewBag.Title = "Cập nhật mặt hàng";
-                        return View("Edit", model);
-                    }
-                } 
-                }
-                return RedirectToAction("Index");
-        } //Ctrl + R + R , refactor thay đổi đồng bộ
+                bool result = ProductDataServices.UpdateProduct(model);
+            }
+            return RedirectToAction("Index");
+        }
         public IActionResult Delete(int id = 0)
         {
 
@@ -168,8 +184,8 @@ namespace SV20T1020639.Web.Controllers
                 return RedirectToAction("Index");
             return View(model);
         }
-        
-        public IActionResult Photo(int id = 0 ,string method = "", int photoId = 0)
+
+        public IActionResult Photo(int id = 0, string method = "", int photoId = 0)
         {
             ProductPhoto model = null;
             switch (method)
@@ -183,7 +199,7 @@ namespace SV20T1020639.Web.Controllers
                         Photo = "nophoto2.jpg",
                     };
                     return View(model);
-                   
+
                 case "edit":
                     ViewBag.Title = "Thay đổi ảnh";
                     if (photoId < 0)
@@ -191,7 +207,7 @@ namespace SV20T1020639.Web.Controllers
                         return RedirectToAction("Edit");
                     }
                     model = ProductDataServices.GetPhoto(photoId);
-                   
+
                     if (model == null)
                     {
                         return RedirectToAction("Index");
@@ -199,7 +215,7 @@ namespace SV20T1020639.Web.Controllers
                     return View(model);
                 case "delete":
                     ProductDataServices.DeletePhoto(photoId);
-                    return RedirectToAction("Edit", new { id = id }); 
+                    return RedirectToAction("Edit", new { id = id });
                 default:
                     return RedirectToAction("Index");
             }
@@ -237,14 +253,15 @@ namespace SV20T1020639.Web.Controllers
                     $"Thứ tự hiển thị {model.DisplayOrder} của hình ảnh đã được sử dụng trước đó");
             }
 
-            
+
             model.IsHidden = Convert.ToBoolean(model.IsHidden.ToString());
             // xử lý nghiệp vụ upload file
             if (uploadPhoto != null)
             {
                 //Tên file sẽ lưu trên server
-/*                string fileName = $"{DateTime.Now.Ticks}_{uploadPhoto.FileName}"; //Tên file sẽ lưu trên server
-*/                string fileName = $"{model.PhotoID}";                                                                //Đường dẫn đến file sẽ lưu trên server 
+                /* string fileName = $"{DateTime.Now.Ticks}_{uploadPhoto.FileName}"; /*//*/Tên file sẽ lưu trên server*/
+
+                string fileName = $"{model.ProductID}_{uploadPhoto.FileName}";                                                                //Đường dẫn đến file sẽ lưu trên server 
                 string filePath = Path.Combine(ApplicationContext.HostEnviroment.WebRootPath, @"images\products", fileName);
 
                 //Lưu file lên server
@@ -311,7 +328,7 @@ namespace SV20T1020639.Web.Controllers
                     return View(model);
                 case "delete":
                     ProductDataServices.DeleteAttribute(attributeId);
-                    return RedirectToAction("Edit", new { id = id });  
+                    return RedirectToAction("Edit", new { id = id });
                 default:
                     return RedirectToAction("Index");
             }
