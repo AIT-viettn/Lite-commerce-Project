@@ -121,7 +121,7 @@ namespace SV20T1020639.Web
         public const string Administrator = "admin";
 
         [Display(Name = "Nhân viên")]
-        public const string Employee = "employees";
+        public const string Employee = "employee";
 
         [Display(Name = "Khách hàng")]
         public const string Customer = "customer";

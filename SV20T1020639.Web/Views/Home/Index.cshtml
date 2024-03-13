@@ -1,8 +1,53 @@
-﻿@{
+﻿@using SV20T1020639.Web
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Chào mừng</h1>
+    <p>Learn about <a href="~/">building Web apps with ASP.NET Core</a>.</p>
+    @{
+        // Lấy danh sách các vai trò từ biến môi trường Razor
+        string[] roles = new string[] { WebUserRoles.Administrator, WebUserRoles.Employee };
+    }
+
+    <p>
+        @foreach (var role in roles)
+        {
+            <span>@role</span>
+
+        }
+    </p>
+    @{
+        // Lấy thông tin người dùng từ Principal
+        var userData = User.GetUserData();
+        var roleInfo = WebUserRoles.ListOfRoles.FirstOrDefault();
+    }
+
+    @if (userData != null)
+    {
+        <p>User ID: @userData.UserId</p>
+        <p>User Name: @userData.UserName</p>
+        <p>Display Name: @userData.DisplayName</p>
+        <p>@roleInfo.Name</p>
+        <p>@roleInfo.Description</p>
+        <!-- và các thuộc tính khác tương tự -->
+    }
+
+    @if (userData != null || userData.Roles != null)
+    {
+
+        <p>
+            @if (userData.Roles.Contains(WebUserRoles.Administrator))
+            {
+                <span>User is Administrator</span>
+            }
+            @if (userData.Roles.Contains(WebUserRoles.Employee))
+            {
+                <span>User is Employee</span>
+            }
+        </p>
+    }
+
+
 </div>

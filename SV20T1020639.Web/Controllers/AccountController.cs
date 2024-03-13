@@ -54,7 +54,7 @@ namespace SV20T1020639.Web.Controllers
 
             //Thiết lập phiên đăng nhập cho tài khoản
             await HttpContext.SignInAsync(userData.CreatePrincipal());
-
+            TempData["Username"] = username;
             return RedirectToAction("Index", "Home");
         }
         public async Task<IActionResult> Logout()
@@ -63,12 +63,50 @@ namespace SV20T1020639.Web.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
         }
-        public IActionResult ChangePassword()
+        [HttpGet]
+        public ActionResult ChangePassword()
         {
+            ViewBag.Title = "Thay đổi mật khẩu";
+            string userName = TempData["Username"] as string;
+            ViewBag.UserName = userName;
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword( string userName = "", string oldPassword = "", string newPassword = "", string confirmPassword = "")
+        {
+            ViewBag.OldPassword = oldPassword;
+            ViewBag.NewPassword = newPassword;
+            ViewBag.userName = userName;
+            ViewBag.confirmPassword = confirmPassword;
 
-
-
+            if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(oldPassword) || string.IsNullOrWhiteSpace(newPassword) || string.IsNullOrWhiteSpace(confirmPassword))
+            {
+                ModelState.AddModelError("", "Thông tin không đầy đủ");
+            }
+           /* if (newPassword != confirmPassword)
+            {
+                ModelState.AddModelError("", "Mật khẩu mới và xác nhận mật khẩu không khớp nhau");
+            }*/
+            if (oldPassword == newPassword)
+            {
+                ModelState.AddModelError("", "Mật khẩu mới không được trùng với mật khẩu cũ");
+            }
+            else
+            {
+                bool isChangePassword = UserAccountService.ChangePassword(userName, oldPassword, newPassword);
+                if (!isChangePassword)
+                {
+                    ModelState.AddModelError("", "Thay đổi mật khẩu thất bại");
+                }
+               
+            }
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Title = "Thay đổi mật khẩu";
+                return View();
+            }
+            return RedirectToAction("Logout");
+        }
     }
 }
