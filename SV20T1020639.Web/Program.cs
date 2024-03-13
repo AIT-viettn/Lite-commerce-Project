@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using SV20T1020639.Web;
 
 
@@ -11,9 +12,17 @@ builder.Services.AddControllersWithViews()
         option.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true; // không sử dụng thông báo mặc định
     });
 //builder.Services.AddControllersWithViews(); Sử dụng thông báo mặc định
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(option =>
+                {
+                    option.Cookie.Name = "AuthenticationCookie";
+                    option.LoginPath = "/Account/Login";
+                    option.AccessDeniedPath = "/Account/AccessDenined";
+                    option.ExpireTimeSpan = TimeSpan.FromMinutes(120);
+                });
 builder.Services.AddSession(option =>
 {
-    option.IdleTimeout = TimeSpan.FromMinutes(60);
+    option.IdleTimeout = TimeSpan.FromMinutes(60);  
     option.Cookie.HttpOnly = true;
     option.Cookie.IsEssential = true;
 });
@@ -27,7 +36,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSession();

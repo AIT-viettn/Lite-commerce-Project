@@ -21,7 +21,7 @@ namespace SV20T1020639.DataLayers
         /// <param name="userName"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        UserAccount Authorize(string userName, string password);
+        UserAccount? Authorize(string userName, string password);
         /// <summary>
         /// Đổi mật khẩu
         /// </summary>

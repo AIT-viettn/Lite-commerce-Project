@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SV20T1020639.BusinessLayers;
 using SV20T1020639.DomainModels;
@@ -6,6 +7,7 @@ using SV20T1020639.Web.Models;
 
 namespace SV20T1020639.Web.Controllers
 {
+    [Authorize(Roles = $"{WebUserRoles.Administrator},{WebUserRoles.Employee}")]
     public class CustomerController : Controller
     {
         const int PAGE_SIZE = 20;

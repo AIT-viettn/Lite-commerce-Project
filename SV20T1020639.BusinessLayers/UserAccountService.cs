@@ -16,7 +16,7 @@ namespace SV20T1020639.BusinessLayers
         {
             userAccountDB = new EmployeeAccountDAL(Configuration.ConnectionString);
         }
-        public static UserAccount Authorize(string userName, string password)
+        public static UserAccount? Authorize(string userName, string password)
         {
             //TODO: Kiểm tra thông tin đăng nhập của Employee
             return userAccountDB.Authorize(userName, password);

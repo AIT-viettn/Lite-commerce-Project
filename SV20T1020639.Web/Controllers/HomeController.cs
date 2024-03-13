@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SV20T1020639.Web.Models;
 using System.Diagnostics;
 
 namespace SV20T1020639.Web.Controllers
 {
+    [Authorize(Roles = $"{WebUserRoles.Administrator},{WebUserRoles.Employee}")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
