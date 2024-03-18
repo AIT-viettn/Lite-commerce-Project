@@ -56,4 +56,5 @@ namespace SV20T1020639.Web.Models
         public int SupplierID { get; set; } = 0;
     }
 
+    
 }
