@@ -26,7 +26,7 @@
             </form>
 
             <!-- Nơi sử dụng để hiển thị danh sách mặt hàng timg được -->
-            <div id="searchRéult"></div>
+            <div id="searchResult"></div>
             <div class="col-md-8">
                 <!-- Hiển thị danh sách các mặt hàng trong giỏ -->
                 <h4>Danh sách mặt hàng đã chọn</h4>
@@ -41,22 +41,38 @@
                     <label class="control-label col-sm-2">Khách hàng:</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="customerID">
-                            <option value="0">-- Chọn khách hàng --</option>
-                            <option value="4251">Lê Thị Như</option>
-                            <option value="4252">Đinh Thị Hoa</option>
-                            <option value="4253">Lê Văn Công</option>
+                            @foreach (var item in SelectListHelper.Customers())
+                            {
+                                if (item.Value == Model.CustomerID.ToString())
+                                {
+                                    <option value="@item.Value" selected>@item.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
                         </select>
+
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-2">Tỉnh/thành:</label>
                     <div class="col-sm-10">
-                        <select class="form-control" name="deliveryProvince">
-                            <option value="">-- Chọn tỉnh/thành --</option>
-                            <option value="Thừa Thiên Huế">Thừa Thiên Huế</option>
-                            <option value="Đà Nẵng">Đà Nẵng</option>
-                            <option value="Quảng Nam">Quảng Nam</option>
+                        <select class="form-control" name="ProvinceName">
+                            @foreach (var item in SelectListHelper.Provinces())
+                            {
+                                if (item.Value == Model.ProvinceName)
+                                {
+                                    <option value="@item.Value" selected>@item.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
                         </select>
+
                     </div>
                 </div>
                 <div class="form-group">

@@ -22,6 +22,7 @@ namespace SV20T1020639.web.Controllers
 
         //Tên biến session dùng để lưu giỏ hàng
         private const string SHOPPING_CART = "shopping_cart";
+        
 
         /// <summary>
         /// Giao diện tìm kiếm và hiển thị kết quả tìm kiếm đơn hàng
@@ -168,9 +169,10 @@ namespace SV20T1020639.web.Controllers
                 {
                     Page = 1,
                     PageSize = PRODUCT_PAGE_SIZE,
-                    SearchValue = "",
+                    SearchValue = ""
                 };
             }
+
             return View(input);
         }
 
@@ -334,8 +336,6 @@ namespace SV20T1020639.web.Controllers
         public IActionResult UpdateDetail(int OrderID, int productID,
             int quantity, decimal salePrice)
         {
-           
-           
             if (quantity <= 0)
             {
                 return Json("Số lượng bán không hợp lệ");

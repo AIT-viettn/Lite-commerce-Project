@@ -55,6 +55,10 @@ namespace SV20T1020639.BusinessLayers
             rowCount = customerDB.Count(searchValue);
             return customerDB.List(page, pageSize, searchValue).ToList();
         }
+        public static List<Customer> ListOfCustomers(string searchValue = "")
+        {
+            return customerDB.List(1, 0, searchValue).ToList();
+        }
         /// <summary>
         /// Lấy thông tin của một khách hàng theo mã khách hàng
         /// </summary>
@@ -268,6 +272,10 @@ namespace SV20T1020639.BusinessLayers
         {
             rowCount = employeeDB.Count(searchValue);
             return employeeDB.List(page, pageSize, searchValue).ToList();
+        }
+        public static List<Employee> ListOfEmployees(string searchValue = "")
+        {
+            return employeeDB.List(1, 0, searchValue).ToList();
         }
         /// <summary>
         /// Lấy thông tin của một nhân viên theo mã nhân viên

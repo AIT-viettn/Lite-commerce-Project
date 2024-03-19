@@ -67,5 +67,64 @@ namespace SV20T1020639.Web
             }
             return list;
         }
+        public static List<SelectListItem> Products()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem()
+            {
+                Value = "0",
+                Text = "--Chọn mặt hàng--"
+            });
+            foreach (var item in ProductDataServices.ListProducts(""))
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = item.ProductID.ToString(),
+                    Text = item.ProductName
+                });
+            }
+            return list;
+        }
+        // <summary>
+        /// Lấy danh sách khách hàng
+        /// </summary>
+        /// <returns></returns>
+        public static List<SelectListItem> Customers()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem()
+            {
+                Value = "0",
+                Text = "--Chọn khách hàng--"
+            });
+            foreach (var item in CommonDataService.ListOfCustomers(""))
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = item.CustomerID.ToString(),
+                    Text = item.CustomerName
+                });
+            }
+            return list;
+        }
+       
+        public static List<SelectListItem> Employees()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem()
+            {
+                Value = "0",
+                Text = "--Chọn nhân viên--"
+            });
+            foreach (var item in CommonDataService.ListOfEmployees(""))
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = item.EmployeeID.ToString(),
+                    Text = $"{item.FullName}"
+                });
+            }
+            return list;
+        }
     }
 }

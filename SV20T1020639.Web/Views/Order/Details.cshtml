@@ -1,4 +1,5 @@
-﻿﻿@Model SV20T1020639.Web.Models.OrderDetailModel
+﻿
+
 @{
     ViewBag.Title = "Quản lý đơn hàng";
     decimal totalPrices = 0;
@@ -7,15 +8,16 @@
 }
 
 <div class="box box-primary">
-   @*  @if (!string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))
+    @if (!string.IsNullOrEmpty(TempData["Message"] as string))
     {
         <div class="alert alert-danger alert-dismissible">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>Lỗi!</strong> @ViewBag.ErrorMessage
+            <strong>Lỗi!</strong> @TempData["Message"]
         </div>
-    } *@
+    }
 
-    <div class="box-header text-right">
+
+    <div class="box-header text-right"> 
         <div class="btn-group">
             <!-- //TODO
             YÊU CẦU: Đối với các chức năng liên quan đến đơn hàng, chỉ được hiển thị menu/nút của những chức năng
@@ -86,7 +88,7 @@
                                onclick="return confirm('Xác nhận hủy đơn hàng này?')">
                                 Hủy đơn hàng
                             </a>
-                        </li>
+                        </li>   
                         break;
                     case 4:
                     case -1:
@@ -182,7 +184,7 @@
                     <h4 style="display: flex; justify-content: space-between">
                         Danh sách mặt hàng thuộc đơn hàng
                         @if (Model.Order.Status == SV20T1020639.DomainModels.Constants.ORDER_INIT) {
-                            <a id="btnAddProduct" href="~/Order/CreateDetail?orderID=@Model.Order.OrderID"
+                            <a id="btnAddProduct" href="~/Order/Create?orderID=@Model.Order.OrderID"
                                class="btn btn-primary btn-modal" style="font-size: 14px;">
                                 <i class="fa fa-plus"></i>
                                 Bổ sung mặt hàng
