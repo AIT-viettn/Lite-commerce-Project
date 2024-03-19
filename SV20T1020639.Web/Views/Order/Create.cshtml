@@ -27,51 +27,25 @@
 
             <!-- Nơi sử dụng để hiển thị danh sách mặt hàng timg được -->
             <div id="searchResult"></div>
-            <div class="col-md-8">
-                <!-- Hiển thị danh sách các mặt hàng trong giỏ -->
-                <h4>Danh sách mặt hàng đã chọn</h4>
-                <div id="shoppingCart"></div>
-            </div>
+            @* <div class="col-md-8">
+               
+            </div> *@
 
             <!-- Form nhập thông tin về khách hàng, nơi giao hàng và khởi tạo đơn hàng -->
-            <form id="formOrderInit" action="~/Order/Init"
+            @* <form id="formOrderInit" action="~/Order/Init"
                   method="post" class="form-horizontal">
                 <h4>Thông tin về khách hàng và địa chỉ giao hàng</h4>
                 <div class="form-group">
                     <label class="control-label col-sm-2">Khách hàng:</label>
                     <div class="col-sm-10">
-                        <select class="form-control" name="customerID">
-                            @foreach (var item in SelectListHelper.Customers())
-                            {
-                                if (item.Value == Model.CustomerID.ToString())
-                                {
-                                    <option value="@item.Value" selected>@item.Text</option>
-                                }
-                                else
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            }
-                        </select>
+                     
 
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-2">Tỉnh/thành:</label>
                     <div class="col-sm-10">
-                        <select class="form-control" name="ProvinceName">
-                            @foreach (var item in SelectListHelper.Provinces())
-                            {
-                                if (item.Value == Model.ProvinceName)
-                                {
-                                    <option value="@item.Value" selected>@item.Text</option>
-                                }
-                                else
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            }
-                        </select>
+                       
 
                     </div>
                 </div>
@@ -93,9 +67,9 @@
                         </button>
                     </div>
                 </div>
-            </form>
+            </form> *@
 
-            <div>
+           @*  <div>
                 <!-- Hiển thị danh sách mặt hàng tìm được -->
                 @for (int i = 1; i <= 5; i++)
                 {
@@ -137,56 +111,15 @@
                     <li class="next"><a href="#"><i class="fa fa-forward"></i></a></li>
                 </ul>
 
-            </div>
+            </div> *@
         </div>
 
         <!-- Thông tin giỏ hàng, khách hàng -->
         <div class="col-md-8">
             <!-- Giỏ hàng -->
+            <!-- Hiển thị danh sách các mặt hàng trong giỏ -->
             <h4>Danh sách mặt hàng đã chọn</h4>
-            <table class="table table-bordered table-striped table-hover">
-                <thead>
-                    <tr class="bg-primary">
-                        <th class="text-center">STT</th>
-                        <th class="text-center">Tên hàng</th>
-                        <th class="text-center">ĐVT</th>
-                        <th class="text-center">Số lượng</th>
-                        <th class="text-center">Giá</th>
-                        <th class="text-center">Thành tiền</th>
-                        <th style="width:40px"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 1; i < 3; i++)
-                    {
-                        <tr>
-                            <td class="text-center">@i</td>
-                            <td>Laptop HP Gaming VICTUS 16 e1105AX R5 6600H (7C0T0PA)</td>
-                            <td class="text-center">Bộ</td>
-                            <td class="text-center">1</td>
-                            <td class="text-right">23,990,000</td>
-                            <td class="text-right">23,990,000</td>
-                            <td class="text-right">
-                                <a href="~/Order/RemoveFromCart/123" class="btn btn-xs btn-danger">
-                                    <i class="fa fa-minus"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="5" class="text-right">Tổng cộng:</th>
-                        <th class="text-right">71,970,000</th>
-                        <th></th>
-                    </tr>
-                </tfoot>
-            </table>
-            <div class="text-right">
-                <a href="~/Order/ClearCart" class="btn btn-sm btn-danger" onclick="return confirm('Có muốn xóa giỏ hàng không?')">
-                    <i class="fa fa-trash"></i> Xóa giỏ hàng
-                </a>
-            </div>
+            <div id="shoppingCart"></div>
 
             <!-- Nhập khách hàng, nhân viên phụ trách và khởi tạo đơn hàng -->
             <form action="~/Order/Init" method="post" class="form-horizontal">
@@ -195,28 +128,43 @@
                     <label class="control-label col-sm-2">Khách hàng:</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="customerID">
-                            <option value="0">-- Chọn khách hàng --</option>
-                            <option value="1">Trần Nguyên Phong</option>
-                            <option value="2">Nguyễn Hoàng Hà</option>
-                            <option value="3">Nguyễn Ngọc Thủy</option>
+                            @foreach (var item in SelectListHelper.Customers())
+                            {
+                                if (item.Value == Model.CustomerID.ToString())
+                                {
+                                    <option value="@item.Value" selected>@item.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
                         </select>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="control-label col-sm-2">Tỉnh/thành:</label>
                     <div class="col-sm-10">
                         <select class="form-control" name="deliveryProvince">
-                            <option value="0">-- Chọn tỉnh/thành --</option>
-                            <option value="Thừa Thiên Huế">Thừa Thiên Huế</option>
-                            <option value="Đà Nẵng">Đà Nẵng</option>
-                            <option value="Quảng Nam">Quảng Nam</option>
+                            @foreach (var item in SelectListHelper.Provinces())
+                            {
+                                if (item.Value == Model.ProvinceName)
+                                {
+                                    <option value="@item.Value" selected>@item.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-2">Địa chỉ nhận hàng:</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" name="deliveryAddress" />
+                        <input type="text" class="form-control" name="deliveryAddress" id="deliveryAddress" required />
                     </div>
                 </div>
                 <div class="form-group">
@@ -240,6 +188,11 @@
             });
             $("#formOrderInit").submit(function (e) {
                 e.preventDefault();
+                var deliveryAddress = $("#deliveryAddress").val();
+                if (deliveryAddress.trim() === "") {
+                    alert("Vui lòng nhập địa chỉ nhận hàng!");
+                    return;
+                }
                 var action = $(this).prop("action");
                 var method = $(this).prop("method");
                 var data = $(this).serializeArray();
