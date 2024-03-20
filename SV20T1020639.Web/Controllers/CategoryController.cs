@@ -70,7 +70,16 @@ namespace SV20T1020639.Web.Controllers
                 ModelState.AddModelError("CategoryName", "Tên loại hàng được để trống"); //tên lỗi + thông báo lỗi
             if (string.IsNullOrWhiteSpace(model.Description))
                 ModelState.AddModelError("Description", "vui lòng nhập thông tin chi tiết cho loại hàng");
-
+            List<Category> list
+                = CommonDataService.ListOfCategories("");
+            foreach (Category item in list)
+            {
+                if (model.CategoryName == item.CategoryName && model.CategoryID != item.CategoryID)
+                {
+                    ModelState.AddModelError(nameof(model.CategoryName), $"Tên loại hàng '{model.CategoryName}' đã tồn tại.");
+                    break;
+                }
+            }
             if (!ModelState.IsValid)
             {
                 ViewBag.Title = model.CategoryID == 0 ? "Bổ sung loại hàng" : "cập nhật thông tin loại hàng";
@@ -79,20 +88,24 @@ namespace SV20T1020639.Web.Controllers
             if (model.CategoryID == 0)
             {
                 int id = CommonDataService.AddCategory(model);
-                if (id < 0)
+                if (id <= 0)
                 {
-                    ModelState.AddModelError("CategoryName", "Tên loại hàng bị trùng");
-                    ViewBag.Title = CREATE_TITLE;
+                    ModelState.AddModelError(nameof(model.CategoryName), "Tên loại bị trùng ");
+                    ViewBag.Title = "Bổ sung loại hàng";
                     return View("Edit", model);
                 }
             }
             else
             {
                 bool result = CommonDataService.UpdateCategory(model);
-                ModelState.AddModelError("Error", "Không cập nhật được loại hàng. Có thể tên loại hàng bị trùng");
-                return View("Edit", model);
+                if (!result)
+                {
+                    ModelState.AddModelError("Error", "Không cập nhật được loại hàng . Có thể tên loại bị trùng");
+                    ViewBag.Title = "Cập nhật loại hàng";
+                    return View("Edit", model);
+                }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index");   
         } //Ctrl + R + R , refactor thay đổi đồng bộ
         public IActionResult Delete(int id = 0)
         {

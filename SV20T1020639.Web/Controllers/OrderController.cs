@@ -6,7 +6,7 @@ using SV20T1020639.Web.Models;
 using SV20T1020639.Web;
 using Microsoft.AspNetCore.Http;
 
-namespace SV20T1020639.web.Controllers
+namespace SV20T1020639.Web.Controllers
 {
     [Authorize(Roles = $"{WebUserRoles.Administrator}, {WebUserRoles.Employee}")]
     public class OrderController : Controller
@@ -289,10 +289,13 @@ namespace SV20T1020639.web.Controllers
                 return Json("Vui lòng nhập đầy đủ thông tin");
             }
             int employeeID = Convert.ToInt32(User.GetUserData()?.UserId);
-            int orderID = OrderDataService.InitOrder(employeeID, customerID,
+            int orderID = OrderDataService.InitOrder(employeeID, customerID, 
                                         deliveryProvince, deliveryAddress, shoppingCart);
             ClearCart();
-            return Json(orderID);
+            //return Json(orderID); đã ra orderID , muốn chuyển sang order cho hợp lí
+            return RedirectToAction("Index");
+
+
         }
 
         /// <summary>

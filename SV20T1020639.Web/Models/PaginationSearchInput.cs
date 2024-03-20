@@ -17,6 +17,7 @@
         public int CategoryID { get; set; } = 0;
         public int SupplierID { get; set; } = 0;
         public int EmployeeID { get; set;} = 0;
+        public int ShipperID { get; set; } = 0;
         public int CustomerID { get; set; } = 0;
         public string ProvinceName { get; set; } = "";
 

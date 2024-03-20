@@ -2,11 +2,11 @@
 
 @{
     ViewBag.Title = "Quản lý đơn hàng";
+    <p>@ViewBag.OrderID</p>
     decimal totalPrices = 0;
     int index = 1;
     //string errorMessage = ViewBag.ErrorMessage.ToString() ?? "";
 }
-
 <div class="box box-primary">
     @if (!string.IsNullOrEmpty(TempData["Message"] as string))
     {
@@ -64,7 +64,7 @@
                         break;
                     case 2:
                         <li class="listBtnShipping">
-                            <a href="~/Order/Shipping/@Model.Order.OrderID?countProducts=@Model.OrderDetails.Count" class="btn-modal">
+                                <a href="~/Order/Shipping/@Model.Order.OrderID?countProducts=@Model.Details.Count" class="btn-modal">
                                 Chuyển giao hàng
                             </a>
                         </li>
@@ -119,7 +119,7 @@
             </div>
             <label class="control-label col-sm-2">Ngày lập đơn hàng:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@string.Format("{0:dd/MM/yyyy HH:mm}", Model.Order.OrderTime)</p>
+                <p class="form-control-static">  @Model.Order.OrderTime</p>
             </div>
             <label class="control-label col-sm-2">Nhân viên phụ trách:</label>
             <div class="col-sm-4">
@@ -127,7 +127,7 @@
             </div>
             <label class="control-label col-sm-2">Ngày nhận đơn hàng:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@string.Format("{0:dd/MM/yyyy HH:mm}", Model.Order.AcceptTime)</p>
+                <p class="form-control-static"> @Model.Order.AcceptTime</p>
             </div>
         </div>
 
@@ -161,7 +161,7 @@
             </div>
             <label class="control-label col-sm-2">Nhận giao hàng lúc:</label>
             <div class="col-sm-4">
-                <p id="ShippedTime" class="form-control-static">@string.Format("{0:dd/MM/yyyy HH:mm}", Model.Order.ShippedTime)</p>
+                <p id="ShippedTime" class="form-control-static"> @Model.Order.ShippedTime</p>
             </div>
         </div>
 
@@ -172,7 +172,7 @@
             </div>
             <label class="control-label col-sm-2">Thời điểm hoàn tất:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@string.Format("{0:dd/MM/yyyy HH:mm}", Model.Order.FinishedTime)</p>
+                <p class="form-control-static"> @Model.Order.FinishedTime</p>
             </div>
         </div>
     </div>
@@ -183,13 +183,6 @@
                 <caption>
                     <h4 style="display: flex; justify-content: space-between">
                         Danh sách mặt hàng thuộc đơn hàng
-                        @if (Model.Order.Status == SV20T1020639.DomainModels.Constants.ORDER_INIT) {
-                            <a id="btnAddProduct" href="~/Order/Create?orderID=@Model.Order.OrderID"
-                               class="btn btn-primary btn-modal" style="font-size: 14px;">
-                                <i class="fa fa-plus"></i>
-                                Bổ sung mặt hàng
-                            </a>
-                        }
                     </h4>
                 </caption>
                 <thead>

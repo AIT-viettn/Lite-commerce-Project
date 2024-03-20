@@ -8,12 +8,13 @@
            
             <div class="form-group">
                 <label>Mã loại:</label>
-                <input type="text" class="form-control" name="@nameof(Model.CategoryID)" value="@Model.CategoryID">
+                <input type="text" class="form-control" name="@nameof(Model.CategoryID)" value="@Model.CategoryID" readonly>
             </div>
 
             <div class="form-group">
                 <label>Tên loại:</label>
                 <input type="text" class="form-control" name="CategoryName" autofocus value="@Model.CategoryName">
+
                 @Html.ValidationMessageFor(m => m.CategoryName,"", new {@style = "color:#f00" })
             </div>
 

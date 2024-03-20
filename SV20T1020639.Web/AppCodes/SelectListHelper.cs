@@ -126,5 +126,23 @@ namespace SV20T1020639.Web
             }
             return list;
         }
+        public static List<SelectListItem> Shippers()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem()
+            {
+                Value = "0",
+                Text = "--Chọn đơn vị vận chuyển--"
+            });
+            foreach (var item in CommonDataService.ListOfShippers(""))
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = item.ShipperID.ToString(),
+                    Text = $"{item.ShipperName}"
+                });
+            }
+            return list;
+        }
     }
 }

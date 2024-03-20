@@ -208,6 +208,10 @@ namespace SV20T1020639.BusinessLayers
             rowCount = shipperDB.Count(searchValue);
             return shipperDB.List(page, pageSize, searchValue).ToList();
         }
+        public static List<Shipper> ListOfShippers(string searchValue = "")
+        {
+            return shipperDB.List(1, 0, searchValue).ToList();
+        }
         /// <summary>
         ///  Lấy thông tin của một người giao hàng theo mã giao hàng
         /// </summary>

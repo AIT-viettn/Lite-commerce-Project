@@ -21,7 +21,18 @@ namespace SV20T1020639.DataLayers.SQLServer
                 var sql = @"INSERT INTO Orders(CustomerID, OrderTime, DeliveryProvince, DeliveryAddress, EmployeeID, Status)
                             VALUES(@CustomerID, GETDATE(), @DeliveryProvince, @DeliveryAddress, @EmployeeID, @Status);
                             SELECT CAST(SCOPE_IDENTITY() AS INT)";
-                id = connection.ExecuteScalar<int>(sql, data);
+                var parameters = new
+                {
+                    CustomerID = data.CustomerID ,
+                    OrderTime = data.OrderTime,
+                    DeliveryProvince = data.DeliveryProvince,
+                    DeliveryAddress = data.DeliveryAddress,
+                    EmployeeID = data.EmployeeID,
+                    Status = data.Status
+                    
+                };
+                id = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
+                connection.Close();
             }
             return id;
         }

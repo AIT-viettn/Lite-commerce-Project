@@ -1,10 +1,11 @@
-﻿@{
+﻿
+@{
     Layout = null;
 }
 
 <div class="modal-dialog">
     <div class="modal-content">
-        <form action="~/Admin/Order/Shipping/@ViewBag.OrderID" method="post">
+        <form id="formShipping" action="~/Order/Shipping/@ViewBag.OrderID" method="post">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Chuyển giao hàng cho đơn hàng</h4>
@@ -13,11 +14,14 @@
                 <div class="form-group">
                     <label class="control-label">Người giao hàng:</label>
                     <select class="form-control" name="shipperID">
-                        <option value="0">-- Chọn người giao hàng ---</option>
-                        <option value="1">Giao hàng Tiết kiệm</option>
-                        <option value="2">Tín Thành</option>
-                        <option value="3">Viettel Express</option>
+                        @foreach (var item in SelectListHelper.Shippers())
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
                     </select>
+                </div>
+                <div class="form-group">
+                    <span id="message" style="color: #f00;"></span>
                 </div>
             </div>
             <div class="modal-footer">
@@ -40,7 +44,7 @@
             var method = $(this).prop("method");
             var postData = $(this).serializeArray();
 
-            $ajax({
+            $.ajax({
                 url: url,
                 type: method,
                 data: postData,
