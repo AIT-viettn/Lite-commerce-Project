@@ -1,11 +1,11 @@
-﻿
+﻿@model SV20T1020639.Web.Models.OrderDetailModel
+
 
 @{
     ViewBag.Title = "Quản lý đơn hàng";
     <p>@ViewBag.OrderID</p>
     decimal totalPrices = 0;
     int index = 1;
-    //string errorMessage = ViewBag.ErrorMessage.ToString() ?? "";
 }
 <div class="box box-primary">
     @if (!string.IsNullOrEmpty(TempData["Message"] as string))
@@ -64,12 +64,12 @@
                         break;
                     case 2:
                         <li class="listBtnShipping">
-                                <a href="~/Order/Shipping/@Model.Order.OrderID?countProducts=@Model.Details.Count" class="btn-modal">
+                                <a href="~/Order/Shipping/@Model.Order.OrderID" class="btn-modal">
                                 Chuyển giao hàng
                             </a>
                         </li>
                         <li class="divider listBtnShipping"></li>
-                        <li class="listBtnShipping">
+                        <li class="listBtnCancel">
                             <a href="~/Order/Cancel/@Model.Order.OrderID"
                                onclick="return confirm('Xác nhận hủy đơn hàng này?')">
                                 Hủy đơn hàng
@@ -83,7 +83,7 @@
                                 Xác nhận hoàn tất đơn hàng
                             </a>
                         </li>
-                        <li class="listBtnShipping">
+                            <li class="listBtnCancel">
                             <a href="~/Order/Cancel/@Model.Order.OrderID"
                                onclick="return confirm('Xác nhận hủy đơn hàng này?')">
                                 Hủy đơn hàng
@@ -93,11 +93,6 @@
                     case 4:
                     case -1:
                     case -2:
-                        <li>
-                            <a>
-                                Trống
-                            </a>
-                        </li>
                         break;
 
                 }
@@ -197,7 +192,7 @@
                     </tr>
                 </thead>
                 <tbody id="listProducts">
-                    @foreach (var item in Model.Details)
+                    @foreach (var item in Model.Details)    
                     {
                         totalPrices += item.TotalPrice;
                         <tr>
@@ -216,9 +211,10 @@
                                        class="btn btn-xs btn-primary btn-modal">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <a href="~/Order/DeleteDetail/@item.OrderID/@item.ProductID" class="btn btn-xs btn-danger"
+                                    <a href="~/Order/DeleteDetail/@item.OrderID/@item.ProductID" 
+                                    class="btn btn-xs btn-danger"
                                        onclick="return confirm('Xóa mặt hàng này khỏi đơn hàng?')">
-                                        <i class="fa fa-trash"></i>
+                                        <i class="fa fa-remove"></i>
                                     </a>
                                 } else {
                                     <a href="javascript:;" class="btn btn-xs btn-primary"
@@ -227,7 +223,7 @@
                                     </a>
                                     <a href="javascript:;" class="btn btn-xs btn-danger"
                                        style="cursor: no-drop;" title="Chỉ được xoá khi trạng thái đơn hàng đang chờ duyệt">
-                                        <i class="fa fa-trash"></i>
+                                        <i class="fa fa-remove"></i>
                                     </a>
                                 }
                             </td>

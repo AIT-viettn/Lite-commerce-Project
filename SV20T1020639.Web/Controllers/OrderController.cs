@@ -49,6 +49,7 @@ namespace SV20T1020639.Web.Controllers
         public IActionResult Search(OrderSearchInput input)
         {
             int rowCount = 0;
+
             var data = OrderDataService.ListOrders(out rowCount, input.Page, input.PageSize,
                 input.Status, input.FromTime, input.ToTime, input.SearchValue ?? "");
             var model = new OrderSearchResult
@@ -364,6 +365,14 @@ namespace SV20T1020639.Web.Controllers
         /// <returns></returns>
         public IActionResult DeleteDetail(int id = 0, int productId = 0)
         {
+            if (id < 0)
+            {
+                return RedirectToAction("Index");
+            }
+            if (productId < 0)
+            {
+                return RedirectToAction("Details", new { id });
+            }
             bool result = OrderDataService.DeleteOrderDetail(id, productId);
             if (!result)
             {

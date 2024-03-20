@@ -7,7 +7,8 @@
     <div class="modal-content">
         @if (Model != null)
         {
-            <form action="~/Order/UpdateDetail/@Model.OrderID" method="post" class="form-horizontal">
+            <form id="formEditDetail" action="~/Order/UpdateDetail/@Model.OrderID" method="post" class="form-horizontal">
+                @Html.AntiForgeryToken()
                 @Html.HiddenFor(m => m.OrderID);
                 @Html.HiddenFor(m => m.ProductID);
                 <div class="modal-header bg-primary">

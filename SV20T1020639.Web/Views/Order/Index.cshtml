@@ -25,7 +25,7 @@
                 <div class="col-sm-8 input-group">
                     <input type="text" name="searchValue"
                            class="form-control"
-                           placeholder="Tìm kiếm theo tên khách hàng hoặc tên người giao hàng">
+                           placeholder="Tìm kiếm theo tên khách hàng, nhân viên hoặc tên đơn vị giao hàng">
                     <span class="input-group-btn">
                         <button type="submit" id="search-btn" class="btn btn-flat btn-info">
                             <i class="fa fa-search"></i> Tìm kiếm
@@ -40,7 +40,7 @@
     </div>
 </div>
 
-@section Scripts{
+@section Scripts {
     <script>
         $(document).ready(function () {
             $("#formSearch").submit(function (e) {
@@ -51,16 +51,27 @@
 
             doSearch("#formSearch", @Model.Page);
         });
-       
+
         $('#statusOrder').change(function () {
             doSearch("#formSearch", 1);
         });
-        doSearch(@Model.Page);
+
         function doSearch(formSearchInput, page) {
             var url = $(formSearchInput).prop("action");
             var container = $(formSearchInput).data("container");
             var postData = $(formSearchInput).serializeArray();
             postData.push({ "name": "page", "value": page });
+
+            // Lấy giá trị thời gian từ input có name là orderTime
+            var orderTime = $(formSearchInput).find('input[name="orderTime"]').val();
+            if (orderTime !== '') {
+                // Chia chuỗi thời gian thành khoảng thời gian bắt đầu và kết thúc
+                var timeRange = orderTime.split(' - ');
+                // Thêm vào postData
+                postData.push({ "name": "FromTime", "value": timeRange[0] });
+                postData.push({ "name": "ToTime", "value": timeRange[1] });
+            }
+
             $.ajax({
                 url: url,
                 type: "POST",
@@ -72,8 +83,6 @@
                     $(container).html(data);
                 }
             });
-
-            return;
         }
     </script>
 }
