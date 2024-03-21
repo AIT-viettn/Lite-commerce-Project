@@ -319,9 +319,9 @@ namespace SV20T1020639.Web.Controllers
         /// <returns></returns>
 
         [HttpGet]
-        public IActionResult EditDetail(int id = 0, int productId = 0)
+        public IActionResult EditDetail(int id = 0, int productID = 0)
         {
-            var model = OrderDataService.GetOrderDetail(id, productId);
+            var model = OrderDataService.GetOrderDetail(id, productID);
             return View(model);
         }
 
@@ -337,24 +337,16 @@ namespace SV20T1020639.Web.Controllers
         /// <param name="salePrice">Giá bán</param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult UpdateDetail(int OrderID, int productID,
-            int quantity, decimal salePrice)
+        public IActionResult UpdateDetail(OrderDetail data)
         {
-            if (quantity <= 0)
+            Order od = OrderDataService.GetOrder(data.OrderID);
+            ViewBag.KQ = od.Status;
+            if (Request.Method == "POST")
             {
-                return Json("Số lượng bán không hợp lệ");
+                OrderDataService.SaveOrderDetail(data.OrderID, data.ProductID, data.Quantity, data.SalePrice);
+                return RedirectToAction("Details", new { id = data.OrderID });
             }
-            if (salePrice < 0)
-            {
-                return Json("Giá bán không hợp lệ");
-            }
-
-            bool result = OrderDataService.SaveOrderDetail(OrderID, productID, quantity, salePrice);
-            if (!result)
-            {
-                return Json("Không được phép thay đổi thông tin của đơn hàng này");
-            }
-            return Json("");
+            return View("Details", new { id = data.OrderID });
         }
 
         /// <summary>
@@ -363,22 +355,23 @@ namespace SV20T1020639.Web.Controllers
         /// <param name="id">Mã đơn hàng</param>
         /// <param name="productId">Mã mặt hàng cần xóa</param>
         /// <returns></returns>
-        public IActionResult DeleteDetail(int id = 0, int productId = 0)
+        public IActionResult DeleteDetail(int id = 0, int productID = 0)
         {
             if (id < 0)
             {
                 return RedirectToAction("Index");
             }
-            if (productId < 0)
+            if (productID < 0)
             {
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new { id = id });
             }
-            bool result = OrderDataService.DeleteOrderDetail(id, productId);
+            bool result = OrderDataService.DeleteOrderDetail(id, productID);
             if (!result)
             {
-                TempData["Message"] = "Không thể xóa mặt hàng ra khỏi đơn hàng";
+                TempData["Message"] = "Không thể xóa mặt hàng này ra khỏi đơn hàng";
+                return RedirectToAction("Details", new { id = id });
             }
-            return RedirectToAction("Details", new { id });
+            return RedirectToAction("Details", new { id = id });
         }
 
         /// <summary>

@@ -207,12 +207,12 @@
                                     khi đơn hàng trong trạng thái chờ duyệt
                                 @if (Model.Order.Status == SV20T1020639.DomainModels.Constants.ORDER_INIT)
                                 {
-                                    <a href="~/Order/EditDetail/@item.OrderID/@item.ProductID"
+                                    <a href="~/Order/EditDetail/@item.OrderID?productID=@item.ProductID"
                                        class="btn btn-xs btn-primary btn-modal">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <a href="~/Order/DeleteDetail/@item.OrderID/@item.ProductID" 
-                                    class="btn btn-xs btn-danger"
+                                    <a href="~/Order/DeleteDetail/@item.OrderID?productID=@item.ProductID"
+                                       class="btn btn-xs btn-danger"
                                        onclick="return confirm('Xóa mặt hàng này khỏi đơn hàng?')">
                                         <i class="fa fa-remove"></i>
                                     </a>

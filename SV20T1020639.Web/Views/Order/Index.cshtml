@@ -46,14 +46,16 @@
             $("#formSearch").submit(function (e) {
                 e.preventDefault();
                 doSearch(this, 1);
-                return;
+            });
+
+            $('.daterange-picker').change(function () {
+                doSearch("#formSearch", 1);
+            });
+            $('#statusOrder').change(function () {
+                doSearch("#formSearch", 1);
             });
 
             doSearch("#formSearch", @Model.Page);
-        });
-
-        $('#statusOrder').change(function () {
-            doSearch("#formSearch", 1);
         });
 
         function doSearch(formSearchInput, page) {
