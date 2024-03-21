@@ -5,6 +5,7 @@ using SV20T1020639.DomainModels;
 using SV20T1020639.Web.Models;
 using SV20T1020639.Web;
 using Microsoft.AspNetCore.Http;
+using System.Reflection;
 
 namespace SV20T1020639.Web.Controllers
 {
@@ -282,19 +283,24 @@ namespace SV20T1020639.Web.Controllers
             var shoppingCart = GetShoppingCart();
             if (shoppingCart.Count == 0)
             {
-                return Json("Giỏ hàng trống, không thể lập đơn hàng");
+                TempData["Message"] = "Giỏ hàng trống, không thể lập đơn hàng";
+                // return Json("Giỏ hàng trống, không thể lập đơn hàng");
+                return RedirectToAction("Create");
+
             }
             if (customerID <= 0 || string.IsNullOrWhiteSpace(deliveryProvince)
                 || string.IsNullOrWhiteSpace(deliveryAddress))
             {
-                return Json("Vui lòng nhập đầy đủ thông tin");
+                TempData["Message"] = "Vui lòng nhập đầy đủ thông tin";
+              //  return Json("Vui lòng nhập đầy đủ thông tin");
+                return RedirectToAction("Create");
             }
             int employeeID = Convert.ToInt32(User.GetUserData()?.UserId);
             int orderID = OrderDataService.InitOrder(employeeID, customerID, 
                                         deliveryProvince, deliveryAddress, shoppingCart);
             ClearCart();
             //return Json(orderID); đã ra orderID , muốn chuyển sang order cho hợp lí
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { id = orderID });
 
 
         }
@@ -339,7 +345,14 @@ namespace SV20T1020639.Web.Controllers
         [HttpPost]
         public IActionResult UpdateDetail(OrderDetail data)
         {
-            Order od = OrderDataService.GetOrder(data.OrderID);
+            if (data.Quantity < 1 || data.SalePrice < 1)
+            {
+                return Json("Giá trị nhập vào không được nhỏ hơn 1");
+                /*test// ModelState.AddModelError(nameof(data.SalePrice), "Đơn giá không được nhỏ hơn 1");
+                // TempData["Message"] = "giá trị nhập vào không được nhỏ hơn 1";
+                // return RedirectToAction("EditDetail", new {id = data.ProductID});*/
+            }
+                Order od = OrderDataService.GetOrder(data.OrderID);
             ViewBag.KQ = od.Status;
             if (Request.Method == "POST")
             {
@@ -399,6 +412,7 @@ namespace SV20T1020639.Web.Controllers
         {
             if (shipperID <= 0)
             {
+             
                 return Json("Vui lòng chọn người giao hàng");
             }
 

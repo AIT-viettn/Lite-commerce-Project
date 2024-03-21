@@ -3,7 +3,15 @@
     ViewBag.Title = "Lập đơn hàng";
 }
 
+
 <div class="box box-primary">
+    @if (!string.IsNullOrEmpty(TempData["Message"] as string))
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Lỗi!</strong> @TempData["Message"]
+        </div>
+    }
     <div class="box-body">
 
         <!-- Tìm kiếm, hiển thị và chọn hàng đưa vào giỏ -->
