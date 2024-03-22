@@ -4,47 +4,48 @@
     Layout = null;
 }
 <div>
-<p style="margin-top: 10px; text-align: center; color: green;">
-    Có <strong>@Model.RowCount</strong> điều kiện thỏa mãn trong tổng số <strong>@Model.PageCount</strong> trang
-</p>
+    <p style="margin-top: 10px; text-align: center; color: green;">
+        Có <strong>@Model.RowCount</strong> điều kiện thỏa mãn trong tổng số <strong>@Model.PageCount</strong> trang
+    </p>
 
-<div class="table-responsive">
-    <table class="table table-bordered table-hover table-striped">
-        <thead>
-            <tr class="bg-primary">
-                <th>Khách hàng</th>
-                <th>Ngày lập</th>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr class="bg-primary">
+                    <th>Khách hàng</th>
+                    <th>Ngày lập</th>
 
-                <th>Nhân viên phụ trách</th>
-                <th>Thời điểm duyệt</th>
-                <th>Người giao hàng</th>
-                <th>ngày nhận giao hàng</th>
-                <th>Thời điểm kết thúc</th>
-                <th>Trạng thái</th>
-                <th style="width:40px"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var item in Model.Data) {
-                <tr>
-                    <td>@item.CustomerName</td>
-                    <td>@string.Format("{0:dd/MM/yyyy HH:mm}", item.OrderTime)</td>
-                    <td>@item.EmployeeName</td>
-                    <td>@string.Format("{0:dd/MM/yyyy HH:mm}", item.AcceptTime)</td>
-                    <td>@item.ShipperName</td>
-                    <td>@string.Format("{0:dd/MM/yyyy HH:mm}", item.ShippedTime)</td>
-                    <td>@string.Format("{0:dd/MM/yyyy HH:mm}", item.FinishedTime)</td>
-                    <td>@item.StatusDescription</td>
-                    <td>
-                        <a href="~/Order/Details/@item.OrderID" class="btn btn-info btn-xs">
-                            <i class="glyphicon glyphicon-th-list"></i>
-                        </a>
-                    </td>
+                    <th>Nhân viên phụ trách</th>
+                    <th>Thời điểm duyệt</th>
+                    <th>Người giao hàng</th>
+                    <th>ngày nhận giao hàng</th>
+                    <th>Thời điểm kết thúc</th>
+                    <th>Trạng thái</th>
+                    <th style="width:40px"></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-    
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Data)
+                {
+                    <tr>
+                        <td>@item.CustomerName</td>
+                        <td>@item.OrderTime.ToString("dd/MM/yyyy", new System.Globalization.CultureInfo("en-GB"))                                                                                                               </td>
+                        <td>@item.EmployeeName</td>
+                        <td>@(item.AcceptTime.HasValue ? item.AcceptTime.Value.ToString("dd-MM-yyyy") : item.AcceptTime)</td>
+                        <td>@item.ShipperName</td>
+                        <td>@(item.ShippedTime.HasValue ? item.ShippedTime.Value.ToString("dd-MM-yyyy") : item.ShippedTime)</td>
+                        <td>@(item.FinishedTime.HasValue ? item.FinishedTime.Value.ToString("dd-MM-yyyy") : item.FinishedTime)</td>
+                        <td>@item.StatusDescription</td>
+                        <td>
+                            <a href="~/Order/Details/@item.OrderID" class="btn btn-info btn-xs">
+                                <i class="glyphicon glyphicon-th-list"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
     </div>
     <div class="text-center">
         <ul class="pagination">
@@ -64,4 +65,4 @@
             }
         </ul>
     </div>
-</div> 
+</div>

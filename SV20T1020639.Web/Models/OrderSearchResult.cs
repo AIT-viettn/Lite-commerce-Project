@@ -1,4 +1,4 @@
-﻿    using SV20T1020639.DomainModels;
+﻿using SV20T1020639.DomainModels;
 
 namespace SV20T1020639.Web.Models
 {

@@ -75,6 +75,12 @@
                                 Hủy đơn hàng
                             </a>
                         </li>
+                            <li>
+                                <a href="~/Order/Reject/@Model.Order.OrderID"
+                                   onclick="return confirm('Xác nhận từ chối đơn hàng này?')">
+                                    Từ chối đơn hàng
+                                </a>
+                            </li>
                         break;
                     case 3:
                         <li>
@@ -204,8 +210,8 @@
                             <td id="TotalPrice-@item.ProductID" class="text-right">@item.TotalPrice</td>
                             <td class="text-right">
                                 Chỉ được cập nhật hoặc xoá danh sách mặt hàng thuộc đơn hàng
-                                    khi đơn hàng trong trạng thái chờ duyệt
-                                @if (Model.Order.Status == SV20T1020639.DomainModels.Constants.ORDER_INIT)
+                                   khi đơn hàng trong trạng thái chờ duyệt hoặc đã duyệt rồi    
+                                @if (Model.Order.Status == SV20T1020639.DomainModels.Constants.ORDER_INIT || Model.Order.Status == SV20T1020639.DomainModels.Constants.ORDER_ACCEPTED)
                                 {
                                     <a href="~/Order/EditDetail/@item.OrderID?productID=@item.ProductID"
                                        class="btn btn-xs btn-primary btn-modal">
@@ -218,11 +224,11 @@
                                     </a>
                                 } else {
                                     <a href="javascript:;" class="btn btn-xs btn-primary"
-                                       style="cursor: no-drop;" title="Chỉ được sửa khi trạng thái đơn hàng đang chờ duyệt">
+                                       style="cursor: no-drop;" title="Chỉ được sửa khi trạng thái đơn hàng đang chờ duyệt hoặc đã duyệt">
                                         <i class="fa fa-edit"></i>
                                     </a>
                                     <a href="javascript:;" class="btn btn-xs btn-danger"
-                                       style="cursor: no-drop;" title="Chỉ được xoá khi trạng thái đơn hàng đang chờ duyệt">
+                                       style="cursor: no-drop;" title="Chỉ được xoá khi trạng thái đơn hàng đang chờ duyệt hoặc đã duyệt">
                                         <i class="fa fa-remove"></i>
                                     </a>
                                 }

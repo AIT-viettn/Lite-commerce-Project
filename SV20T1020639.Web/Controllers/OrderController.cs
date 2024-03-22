@@ -40,8 +40,7 @@ namespace SV20T1020639.Web.Controllers
                     PageSize = ORDER_PAGE_SIZE,
                     SearchValue = "",
                     Status = 0,
-                    DateRange = string.Format("{0:dd/MM/yyyy} - {1:dd/MM/yyyy}",
-                                    DateTime.Today.AddMonths(-1), DateTime.Today)
+                    DateRange = string.Format("{0:dd/MM/yyyy} - {1:dd/MM/yyyy}",DateTime.Today.AddMonths(-1), DateTime.Today)
                 };
             }
             return View(input);
