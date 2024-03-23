@@ -385,6 +385,29 @@ namespace SV20T1020639.Web.Controllers
             }
             return RedirectToAction("Details", new { id = id });
         }
+        
+        [HttpPost]
+        public IActionResult ChangeAddressAndProvince(int id = 0,
+           string deliveryAddress = "", string deliveryProvince = "")
+        {
+            if (string.IsNullOrWhiteSpace(deliveryAddress))
+            {
+                /*return Json("Vui lòng chọn địa chỉ giao hàng");*/
+                TempData["Message"] = "Vui lòng nhập địa chỉ giao hàng";
+            }
+            if (string.IsNullOrWhiteSpace(deliveryProvince))
+            {
+                /*return Json("Vui lòng chọn địa chỉ giao hàng");*/
+                TempData["Message"] = "Vui lòng chọn Tỉnh/Thành";
+            }
+
+            bool result = OrderDataService.ChangeAddressAndProvince(id, deliveryAddress, deliveryProvince);
+            if (!result)
+            {
+                TempData["Message"] = "Đơn hàng không cho phép chuyển địa chỉ khi đã giao cho người giao hàng";
+            }
+            return RedirectToAction("Details", new { id = id });
+        }
 
         /// <summary>
         /// Giao diện để chọn người giao hàng cho đơn hàng

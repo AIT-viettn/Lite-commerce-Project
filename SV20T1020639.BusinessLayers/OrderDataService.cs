@@ -175,7 +175,22 @@ namespace SV20T1020639.BusinessLayers
             return false;
         }
 
-
+        public static bool ChangeAddressAndProvince(int orderID, string deliveryAddress,
+            string deliveryProvince)
+        {
+            Order? data = orderDB.Get(orderID);
+            if (data == null)
+                return false;
+            if (data.Status == Constants.ORDER_INIT || data.Status == Constants.ORDER_ACCEPTED )
+            {
+               /**//* data.Status = Constants.ORDER_SHIPPING;*/
+                data.DeliveryAddress = deliveryAddress;
+                data.DeliveryProvince = deliveryProvince;
+                data.ShippedTime = DateTime.Now;
+                return orderDB.Update(data);
+            }
+            return false;
+        }
         /// <summary>
         /// /// Ghi nhận kết thúc quá trình xử lý đơn hàng thành công
         /// </summary>

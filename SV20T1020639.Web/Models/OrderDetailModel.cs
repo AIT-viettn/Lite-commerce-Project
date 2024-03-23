@@ -7,5 +7,6 @@ namespace SV20T1020639.Web.Models
     {
         public Order Order { get; set; }
         public List<OrderDetail> Details { get; set; }
+        public string DeliveryProvince { get; set; } = "";
     }
 }

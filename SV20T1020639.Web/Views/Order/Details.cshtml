@@ -17,7 +17,7 @@
     }
 
 
-    <div class="box-header text-right"> 
+    <div class="box-header text-right">
         <div class="btn-group">
             <!-- //TODO
             YÊU CẦU: Đối với các chức năng liên quan đến đơn hàng, chỉ được hiển thị menu/nút của những chức năng
@@ -33,76 +33,77 @@
                     </button>
                 }
 
-            <ul class="dropdown-menu" role="menu">
-                <li id="listBtnAccept" style="display: none;">
-                    <a href="~/Order/Finish/@Model.Order.OrderID"
-                       onclick="return confirm('Xác nhận đơn hàng đã hoàn tất thành công?')">
-                        Xác nhận hoàn tất đơn hàng
-                    </a>
-                </li>
-                @switch (Model.Order.Status) {
-                    case 1:
-                        <li>
-                            <a href="~/Order/Accept/@Model.Order.OrderID"
-                               onclick="return confirm('Xác nhận duyệt chấp nhận đơn hàng này?')">
-                                Duyệt đơn hàng
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="~/Order/Cancel/@Model.Order.OrderID"
-                               onclick="return confirm('Xác nhận hủy đơn hàng này?')">
-                                Hủy đơn hàng
-                            </a>
-                        </li>
-                        <li>
-                            <a href="~/Order/Reject/@Model.Order.OrderID"
-                               onclick="return confirm('Xác nhận từ chối đơn hàng này?')">
-                                Từ chối đơn hàng
-                            </a>
-                        </li>
-                        break;
-                    case 2:
-                        <li class="listBtnShipping">
-                                <a href="~/Order/Shipping/@Model.Order.OrderID" class="btn-modal">
-                                Chuyển giao hàng
-                            </a>
-                        </li>
-                        <li class="divider listBtnShipping"></li>
-                        <li class="listBtnCancel">
-                            <a href="~/Order/Cancel/@Model.Order.OrderID"
-                               onclick="return confirm('Xác nhận hủy đơn hàng này?')">
-                                Hủy đơn hàng
-                            </a>
-                        </li>
+                <ul class="dropdown-menu" role="menu">
+                    <li id="listBtnAccept" style="display: none;">
+                        <a href="~/Order/Finish/@Model.Order.OrderID"
+                           onclick="return confirm('Xác nhận đơn hàng đã hoàn tất thành công?')">
+                            Xác nhận hoàn tất đơn hàng
+                        </a>
+                    </li>
+                    @switch (Model.Order.Status)
+                    {
+                        case 1:
+                            <li>
+                                <a href="~/Order/Accept/@Model.Order.OrderID"
+                                   onclick="return confirm('Xác nhận duyệt chấp nhận đơn hàng này?')">
+                                    Duyệt đơn hàng
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="~/Order/Cancel/@Model.Order.OrderID"
+                                   onclick="return confirm('Xác nhận hủy đơn hàng này?')">
+                                    Hủy đơn hàng
+                                </a>
+                            </li>
                             <li>
                                 <a href="~/Order/Reject/@Model.Order.OrderID"
                                    onclick="return confirm('Xác nhận từ chối đơn hàng này?')">
                                     Từ chối đơn hàng
                                 </a>
                             </li>
-                        break;
-                    case 3:
-                        <li>
-                            <a href="~/Order/Finish/@Model.Order.OrderID"
-                               onclick="return confirm('Xác nhận đơn hàng đã hoàn tất thành công?')">
-                                Xác nhận hoàn tất đơn hàng
-                            </a>
-                        </li>
+                            break;
+                        case 2:
+                            <li class="listBtnShipping">
+                                <a href="~/Order/Shipping/@Model.Order.OrderID" class="btn-modal">
+                                    Chuyển giao hàng
+                                </a>
+                            </li>
+                            <li class="divider listBtnShipping"></li>
                             <li class="listBtnCancel">
-                            <a href="~/Order/Cancel/@Model.Order.OrderID"
-                               onclick="return confirm('Xác nhận hủy đơn hàng này?')">
-                                Hủy đơn hàng
-                            </a>
-                        </li>   
-                        break;
-                    case 4:
-                    case -1:
-                    case -2:
-                        break;
+                                <a href="~/Order/Cancel/@Model.Order.OrderID"
+                                   onclick="return confirm('Xác nhận hủy đơn hàng này?')">
+                                    Hủy đơn hàng
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/Order/Reject/@Model.Order.OrderID"
+                                   onclick="return confirm('Xác nhận từ chối đơn hàng này?')">
+                                    Từ chối đơn hàng
+                                </a>
+                            </li>
+                            break;
+                        case 3:
+                            <li>
+                                <a href="~/Order/Finish/@Model.Order.OrderID"
+                                   onclick="return confirm('Xác nhận đơn hàng đã hoàn tất thành công?')">
+                                    Xác nhận hoàn tất đơn hàng
+                                </a>
+                            </li>
+                            <li class="listBtnCancel">
+                                <a href="~/Order/Cancel/@Model.Order.OrderID"
+                                   onclick="return confirm('Xác nhận hủy đơn hàng này?')">
+                                    Hủy đơn hàng
+                                </a>
+                            </li>
+                            break;
+                        case 4:
+                        case -1:
+                        case -2:
+                            break;
 
-                }
-            </ul>
+                    }
+                </ul>
             </div>
             @if (Model.Order.Status != SV20T1020639.DomainModels.Constants.ORDER_SHIPPING
             && Model.Order.Status != SV20T1020639.DomainModels.Constants.ORDER_FINISHED)
@@ -141,14 +142,40 @@
             <div class="col-sm-4">
                 <p class="form-control-static">@Model.Order.CustomerContactName</p>
             </div>
-            <label class="control-label col-sm-2">Địa chỉ:</label>
-            <div class="col-sm-10">
-                <p class="form-control-static">@Model.Order.CustomerAddress</p>
-            </div>
-            <label class="control-label col-sm-2">Email:</label>
-            <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.CustomerEmail</p>
-            </div>
+            <form id="formChange" method="post" action="~/Order/ChangeAddressAndProvince/@Model.Order.OrderID">
+                @Html.HiddenFor(m => m.Order.OrderID)
+                <div class="form-group row">
+                    <label class="control-label col-sm-3 col-md-2">Tỉnh/thành:</label>
+                    <div class="col-sm-9 col-md-4">
+                        <select class="form-control" name="deliveryProvince">
+                            <option value="">-- Chọn tỉnh/thành --</option>
+                            @foreach (var item in SV20T1020639.BusinessLayers.CommonDataService.ListOfProvinces())
+                            {
+                                if (item.ProvinceName == Model.Order.DeliveryProvince)
+                                {
+                                    <option value="@item.ProvinceName" selected>@item.ProvinceName</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.ProvinceName">@item.ProvinceName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-3 col-md-2">Địa chỉ giao hàng:</label>
+                    <div class="col-sm-9 col-md-4">
+                        <input type="text" class="form-control" name="@nameof(Model.Order.DeliveryAddress)" value="@Model.Order.DeliveryAddress">
+                    </div>
+                </div>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" style="margin-left: 5px">
+                        <i class="fa fa-floppy-o"></i> Cập nhật
+                    </button>
+                </div>
+            </form>
         </div>
 
         <div class="form-group">
@@ -198,7 +225,7 @@
                     </tr>
                 </thead>
                 <tbody id="listProducts">
-                    @foreach (var item in Model.Details)    
+                    @foreach (var item in Model.Details)
                     {
                         totalPrices += item.TotalPrice;
                         <tr>
@@ -210,7 +237,7 @@
                             <td id="TotalPrice-@item.ProductID" class="text-right">@item.TotalPrice</td>
                             <td class="text-right">
                                 Chỉ được cập nhật hoặc xoá danh sách mặt hàng thuộc đơn hàng
-                                   khi đơn hàng trong trạng thái chờ duyệt hoặc đã duyệt rồi    
+                                khi đơn hàng trong trạng thái chờ duyệt hoặc đã duyệt rồi
                                 @if (Model.Order.Status == SV20T1020639.DomainModels.Constants.ORDER_INIT || Model.Order.Status == SV20T1020639.DomainModels.Constants.ORDER_ACCEPTED)
                                 {
                                     <a href="~/Order/EditDetail/@item.OrderID?productID=@item.ProductID"
@@ -222,7 +249,9 @@
                                        onclick="return confirm('Xóa mặt hàng này khỏi đơn hàng?')">
                                         <i class="fa fa-remove"></i>
                                     </a>
-                                } else {
+                                }
+                                else
+                                {
                                     <a href="javascript:;" class="btn btn-xs btn-primary"
                                        style="cursor: no-drop;" title="Chỉ được sửa khi trạng thái đơn hàng đang chờ duyệt hoặc đã duyệt">
                                         <i class="fa fa-edit"></i>
@@ -274,4 +303,17 @@
             });
         })
     </script>
-} 
+}
+<style>
+    .input-wrapper {
+        position: relative;
+    }
+
+    .btn-update {
+        position: absolute;
+        right: 10px; /* Khoảng cách từ phải sang */
+        top: 7px; /* Điều chỉnh vị trí dọc */
+        cursor: pointer;
+        color: blue; /* Màu sắc của chữ */
+    }
+</style>
