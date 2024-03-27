@@ -108,5 +108,9 @@ namespace SV20T1020639.Web.Controllers
             }
             return RedirectToAction("Logout");
         }
+        public ActionResult AccessDenined()
+        {
+            return View();
+        }
     }
 }

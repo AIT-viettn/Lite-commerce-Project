@@ -58,9 +58,12 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fa fa-save"></i> Xác nhận xóa
-                    </button>
+                     @if (!SV20T1020639.BusinessLayers.ProductDataServices.InUsedProduct(Model.ProductID))
+                    {
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fa fa-save"></i> Xác nhận xóa
+                        </button>
+                    }
                     <a class="btn btn-default" href="~/Product">
                         Quay lại
                     </a>

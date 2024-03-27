@@ -18,6 +18,7 @@ namespace SV20T1020639.DomainModels
         public string Address { get; set; } = "";
         public string Phone { get; set; } = "";
         public string Email { get; set; } = "";
+        public DateTime BirthDate { get; set; }
 
     }
 }

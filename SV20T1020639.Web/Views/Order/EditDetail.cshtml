@@ -3,6 +3,7 @@
     Layout = null;
 }
 
+
 <div class="modal-dialog">
     <div class="modal-content">
         <form id="Editdetail" action="~/Order/UpdateDetail" method="post" class="form-horizontal">
@@ -24,26 +25,29 @@
                     <label class="control-label col-sm-3">Đơn vị tính:</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" value="@Model.Unit" name="Unit" readonly>
+                        
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">Số lượng:</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" value="@Model.Quantity" name="Quantity">
+                        <input type="text" class="form-control" value="@Model.Quantity" name="Quantity" >
+                        
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">Giá bán:</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" value="@Model.SalePrice.ToString("#,##0.##")" name="SalePrice">
+                       
                     </div>
                 </div>
-                <div class="form-group text-center">
-                    <span id="message" style="color: #f00;"></span>
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-sm-9">
+                        <span id="message" style="color:#f00"></span>
+                    </div>
                 </div>
-
             </div>
-            
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">
                     <i class="fa fa-floppy-o"></i> Cập nhật
@@ -55,7 +59,6 @@
         </form>
     </div>
 </div>
-
 <script>
     $(document).ready(function () {
         $('#Editdetail').submit(function (e) {

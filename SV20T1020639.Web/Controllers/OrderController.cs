@@ -342,23 +342,17 @@ namespace SV20T1020639.Web.Controllers
         /// <param name="salePrice">Giá bán</param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult UpdateDetail(OrderDetail data)
+        public IActionResult UpdateDetail(int orderID, int productID, int quantity, decimal salePrice)
         {
-            if (data.Quantity < 1 || data.SalePrice < 1)
-            {
-                return Json("Giá trị nhập vào không được nhỏ hơn 1");
-                /*test// ModelState.AddModelError(nameof(data.SalePrice), "Đơn giá không được nhỏ hơn 1");
-                // TempData["Message"] = "giá trị nhập vào không được nhỏ hơn 1";
-                // return RedirectToAction("EditDetail", new {id = data.ProductID});*/
-            }
-                Order od = OrderDataService.GetOrder(data.OrderID);
-            ViewBag.KQ = od.Status;
-            if (Request.Method == "POST")
-            {
-                OrderDataService.SaveOrderDetail(data.OrderID, data.ProductID, data.Quantity, data.SalePrice);
-                return RedirectToAction("Details", new { id = data.OrderID });
-            }
-            return View("Details", new { id = data.OrderID });
+            if (quantity <= 0)
+                return Json("Số lượng bán không hợp lệ");
+            if (salePrice <= 0)
+                return Json("Giá bán không hợp lệ");
+
+            bool result = OrderDataService.SaveOrderDetail(orderID, productID, quantity, salePrice);
+            if (!result)
+                return Json("Không được phép thay đổi thông tin của đơn hàng này");
+            return Json("");
         }
 
         /// <summary>
@@ -394,17 +388,21 @@ namespace SV20T1020639.Web.Controllers
             {
                 /*return Json("Vui lòng chọn địa chỉ giao hàng");*/
                 TempData["Message"] = "Vui lòng nhập địa chỉ giao hàng";
+                return RedirectToAction("Details", new { id = id });
             }
             if (string.IsNullOrWhiteSpace(deliveryProvince))
             {
                 /*return Json("Vui lòng chọn địa chỉ giao hàng");*/
                 TempData["Message"] = "Vui lòng chọn Tỉnh/Thành";
+                 return RedirectToAction("Details", new { id = id });
             }
 
             bool result = OrderDataService.ChangeAddressAndProvince(id, deliveryAddress, deliveryProvince);
             if (!result)
             {
-                TempData["Message"] = "Đơn hàng không cho phép chuyển địa chỉ khi đã giao cho người giao hàng";
+                TempData["Message"] = "Đơn hàng không cho phép chuyển địa chỉ nữa";
+                return RedirectToAction("Details", new { id = id });
+
             }
             return RedirectToAction("Details", new { id = id });
         }

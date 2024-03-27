@@ -50,6 +50,7 @@ namespace SV20T1020639.Web.Controllers
 
             {
                 SupplierID = 0,
+                BirthDate = new DateTime(1990, 1, 1)
             };
 
             return View("Edit", model);
@@ -64,7 +65,7 @@ namespace SV20T1020639.Web.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult Save(Supplier model) // nhieu qua nên moi xai model
+        public IActionResult Save(Supplier model, string birthDateInput = "") // nhieu qua nên moi xai model
         {
             if (string.IsNullOrWhiteSpace(model.SupplierName))
                 ModelState.AddModelError("SupplierName", "Tên nhà cung cấp được để trống"); //tên lỗi + thông báo lỗi
@@ -76,7 +77,9 @@ namespace SV20T1020639.Web.Controllers
                 ModelState.AddModelError("Email", "Email không được để trống");
             if (string.IsNullOrWhiteSpace(model.Provice))
                 ModelState.AddModelError("Provice", "Vui lòng chọn tỉnh/thành");
-
+            DateTime? d = birthDateInput.ToDateTime();
+            if (d.HasValue)
+                model.BirthDate = d.Value;
             if (!ModelState.IsValid)
             {
                 ViewBag.Title = model.SupplierID == 0 ? "Bổ sung nhà cung cấp" : "cập nhật thông tin nhà cung cấp";

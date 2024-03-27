@@ -55,7 +55,7 @@ namespace SV20T1020639.DataLayers.SQLServer
 
             using (var connection = OpenConnection())
             {
-                var sql = @"if exists(select * from ProductAttributes where AttributeName = @AttributeName)
+                var sql = @"if exists(select * from ProductAttributes where AttributeName = @AttributeName and ProductID = @ProductID)
                                 select -1
                             else
                                 begin
@@ -395,7 +395,7 @@ namespace SV20T1020639.DataLayers.SQLServer
 
             using (var connection = OpenConnection())
             {
-                var sql = @"if not exists(select * from ProductAttributes where AttributeID <> @attributeId and AttributeName = @attributeName)
+                var sql = @"if not exists(select * from ProductAttributes where AttributeID <> @attributeId and AttributeName = @attributeName and ProductID = @ProductID)
                                 begin
                                     update ProductAttributes 
                                     set ProductID = @productId,

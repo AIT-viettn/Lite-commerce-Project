@@ -70,7 +70,8 @@
                 <div class="col-lg-offset-2 col-sm-10">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" checked name="@nameof(Model.IsSelling)" value="true" @(Model.IsSelling ? "checked" : "") />
+                            @Html.CheckBoxFor(m=>m.IsSelling)
+                          @* //  <input type="checkbox" checked name="@nameof(Model.IsSelling)" value="true" @(Model.IsSelling ? "checked" : "") /> *@
                             Hiện đang được bán
                         </label>
                     </div>

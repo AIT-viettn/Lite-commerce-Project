@@ -36,6 +36,10 @@
                 <p class="form-control-static">@Model.Provice</p>
             </div>
             <div class="form-group">
+                <label class="control-label col-sm-2">Ngày thành lập:</label>
+                <p class="form-control-static">@Model.BirthDate.ToString("dd/MM/yyyy", new System.Globalization.CultureInfo("en-GB"))</p>
+            </div>
+            <div class="form-group">
                 <div class="col-lg-offset-1 col-sm-10">
                     @if (!SV20T1020639.BusinessLayers.CommonDataService.IsUsedSupplier(Model.SupplierID))
                     {

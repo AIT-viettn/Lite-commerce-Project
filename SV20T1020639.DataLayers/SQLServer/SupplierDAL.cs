@@ -25,8 +25,8 @@ namespace SV20T1020639.DataLayers.SQLServer
                                 select -1
                             else
                                 begin
-                                    insert into Suppliers(SupplierName,ContactName,Provice,Address,Phone,Email)
-                                    values(@SupplierName,@ContactName,@Provice,@Address,@Phone,@Email);
+                                    insert into Suppliers(SupplierName,ContactName,Provice,Address,Phone,Email,BirthDate)
+                                    values(@SupplierName,@ContactName,@Provice,@Address,@Phone,@Email,@BirthDate);
 
                                     select @@identity;
                                 end";
@@ -39,6 +39,7 @@ namespace SV20T1020639.DataLayers.SQLServer
                     Address = data.Address ?? "",
                     Phone = data.Phone ?? "",
                     Email = data.Email ?? "",
+                    BirthDate = data.BirthDate
                 };
                 id = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
                 connection.Close();
@@ -167,7 +168,8 @@ namespace SV20T1020639.DataLayers.SQLServer
                                         Provice = @provice,
                                         Address = @address,
                                         Phone = @phone,
-                                        Email = @email
+                                        Email = @email,
+                                        BirthDate = @birthDate
                                         where SupplierID = @supplierID
                                end";
 
@@ -179,7 +181,8 @@ namespace SV20T1020639.DataLayers.SQLServer
                     Provice = data.Provice ?? "",
                     Address = data.Address ?? "",
                     Phone = data.Phone ?? "",
-                    Email = data.Email ?? ""
+                    Email = data.Email ?? "",
+                    BirthDate=data.BirthDate
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
                 connection.Close();

@@ -186,7 +186,7 @@ namespace SV20T1020639.BusinessLayers
                /**//* data.Status = Constants.ORDER_SHIPPING;*/
                 data.DeliveryAddress = deliveryAddress;
                 data.DeliveryProvince = deliveryProvince;
-                data.ShippedTime = DateTime.Now;
+             //   data.ShippedTime = DateTime.Now;
                 return orderDB.Update(data);
             }
             return false;
