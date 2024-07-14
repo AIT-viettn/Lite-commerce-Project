@@ -5,8 +5,9 @@ namespace SV20T1020639.BusinessLayers
     public static class Configuration
     {
         /// <summary>
-        /// chuỗi thông số kết nối CSDL
+        /// chuỗi thông số kết nối CSDL + update xài linQ
         /// </summary>
+        /// 
         public static string ConnectionString { get; private set; } = "";
         /// <summary>
         /// hàm khởi tạo cấu hình cho BusinessLayer
